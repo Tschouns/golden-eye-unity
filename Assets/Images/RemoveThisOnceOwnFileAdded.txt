@@ -1,2 +1,0 @@
-Empty Folders don't go on git, so this file is a placeholder -> Once you have one or more files of your own, you can remove this (because the folder will no longer be empty).
-Should you decide you don't need the folder, you may remove the folder, including this file.
