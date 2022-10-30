@@ -1,5 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scenes/ShootingTestScene.unity.meta
 guid: 97845cbae7dc7c248b4bc1b0950ac65d
+========
+guid: da1c939947a561743af810d35039454b
+folderAsset: yes
+>>>>>>>> 0087f26 (Added a first-person character (based on CharacterController), and basic abstractions for controls. Character features:):Assets/Materials/Markers.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

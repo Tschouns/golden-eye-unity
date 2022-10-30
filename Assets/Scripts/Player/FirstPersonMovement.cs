@@ -7,7 +7,7 @@ namespace Assets.Scripts.Player
     /// Reacts to player input and controls player movement.
     /// </summary>
     [RequireComponent(typeof(CharacterController))]
-    public class FirstPersonMovement : MonoBehaviour, IMove
+    public class FirstPersonMovement : PlayerInputBase, IMove
     {
         [SerializeField]
         private float walkingSpeed = 3f;

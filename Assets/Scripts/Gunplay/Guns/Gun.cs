@@ -7,12 +7,12 @@ namespace Assets.Scripts.Gunplay.Guns
     /// <summary>
     /// Implements the mechanics of a gun.
     /// </summary>
-    public class Gun : MonoBehaviour, IShoot
+    [RequireComponent(typeof(Rigidbody))]
+    public class Gun : MonoBehaviour, IGun
     {
         [SerializeField]
         private Transform muzzle;
 
-        // TODO: make configurable by scriptable object
         [SerializeField]
         private GunProperties properties;
 
@@ -25,10 +25,22 @@ namespace Assets.Scripts.Gunplay.Guns
             this.isTriggerActive = true;
         }
 
+        public void ActivatePhysics()
+        {
+            var rigidbody = this.GetComponent<Rigidbody>();
+            Debug.Assert(rigidbody != null);
+
+            rigidbody.isKinematic = false;
+            rigidbody.useGravity = true;
+            rigidbody.constraints = RigidbodyConstraints.None;
+        }
+
         private void Awake()
         {
             Debug.Assert(this.muzzle != null);
             Debug.Assert(this.properties != null);
+            //Debug.Assert(this.soundSource != null);
+
             this.properties.Verify();
         }
 
@@ -58,8 +70,7 @@ namespace Assets.Scripts.Gunplay.Guns
 
             this.properties.ShootSound.Play(this.muzzle.position);
 
-            // TODO: add to gun properties.
-            var randomizedShotDirection = BallisticsHelper.RandomRotate(this.muzzle.up, 0.08f);
+            var randomizedShotDirection = BallisticsHelper.RandomRotate(this.muzzle.forward, this.properties.MaxDeviationRadians);
 
             // TODO: add layer mask?
             BallisticsHelper.ShootProjectile(

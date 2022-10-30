@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Assets.Scripts.Gunplay.Ballistics
+﻿namespace Assets.Scripts.Gunplay.Ballistics
 {
     /// <summary>
     /// Specifies the different possible types of bullet impacts.

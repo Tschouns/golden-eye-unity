@@ -17,6 +17,8 @@ namespace Assets.Scripts.Gunplay.Effects
                 impact.GetImpulse(),
                 impact.EntryPoint,
                 ForceMode.Impulse);
+
+            Debug.Log($"Applied force: {impact.GetImpulse()}");
         }
 
         private void Awake()
