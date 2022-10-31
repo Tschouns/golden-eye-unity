@@ -19,6 +19,7 @@ namespace Assets.Scripts.Controls
         public bool Right => Input.GetKey(this.keyBindings.Right);
         public bool Run => Input.GetKey(this.keyBindings.Run);
         public bool ToggleCrouch => Input.GetKeyDown(this.keyBindings.ToggleCrouch);
+        public bool Trigger => Input.GetMouseButton(0);
         public bool Reload => Input.GetKeyDown(this.keyBindings.Reload);
         public bool CycleWeapon => Input.GetKeyDown(this.keyBindings.CycleWeapon);
     }

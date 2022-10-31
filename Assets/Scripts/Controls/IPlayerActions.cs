@@ -12,6 +12,7 @@ namespace Assets.Scripts.Controls
         bool Right { get; }
         bool Run { get; }
         bool ToggleCrouch { get; }
+        bool Trigger { get; }
         bool Reload { get; }
         bool CycleWeapon { get; }
     }
