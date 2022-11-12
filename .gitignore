@@ -53,6 +53,7 @@ ExportedObj/
 *.svd
 *.pdb
 .vsconfig
+.vscode/settings.json
 
 # Unity3D generated meta files
 *.pidb.meta
