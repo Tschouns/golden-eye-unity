@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Misc;
+using Assets.Scripts.Sound;
 using UnityEngine;
 
 namespace Assets.Scripts.Gunplay.Guns
@@ -23,6 +24,9 @@ namespace Assets.Scripts.Gunplay.Guns
         [Range(0, 30)]
         private float maxDeviationDegrees = 5f;
 
+        [SerializeField]
+        private SimpleSoundEmitter shootSound;
+
         /// <summary>
         /// Gets the cartridge specification.
         /// </summary>
@@ -43,10 +47,17 @@ namespace Assets.Scripts.Gunplay.Guns
         /// </summary>
         public float MaxDeviationRadians => this.maxDeviationDegrees * Mathf.Deg2Rad;
 
+        /// <summary>
+        /// Gets the sound to play when shooting.
+        /// </summary>
+        public SimpleSoundEmitter ShootSound => this.shootSound;
+
         public void Verify()
         {
             Debug.Assert(this.cartridge != null);
             Debug.Assert(this.fireRate > 0);
+            Debug.Assert(this.shootSound != null);
+            this.shootSound.Verify();
         }
     }
 }
