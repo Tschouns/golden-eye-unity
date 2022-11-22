@@ -8,7 +8,7 @@ namespace Assets.Scripts.Player
     /// </summary>
     [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(FirstPersonMovement))]
-    public class Crouch : MonoBehaviour
+    public class Crouch : PlayerInputBase
     {
         [SerializeField]
         private Transform head;

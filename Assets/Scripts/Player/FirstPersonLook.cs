@@ -5,7 +5,7 @@ namespace Assets.Scripts.Player
     /// <summary>
     /// Reacts to player look axes input and controls player look direction -- i.e. rotates the player and camera.
     /// </summary>
-    public class FirstPersonLook : MonoBehaviour
+    public class FirstPersonLook : PlayerInputBase
     {
         [SerializeField]
         private Transform playerCharacter;
