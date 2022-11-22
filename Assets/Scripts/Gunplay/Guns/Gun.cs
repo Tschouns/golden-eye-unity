@@ -56,7 +56,7 @@ namespace Assets.Scripts.Gunplay.Guns
                 return false;
             }
 
-            Debug.Log("Bang!");
+            this.properties.ShootSound.Play(this.muzzle.position);
 
             // TODO: add to gun properties.
             var randomizedShotDirection = BallisticsHelper.RandomRotate(this.muzzle.up, 0.08f);
