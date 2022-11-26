@@ -85,6 +85,7 @@ namespace Assets.Scripts.Gunplay.Ballistics
             var allReverseHits = Physics.RaycastAll(supportPoint, -shotDirectionNormalized, (supportPoint - hit.point).magnitude);
             var reverseHit = allReverseHits.First(r => r.collider == hit.collider);
             var exitPoint = reverseHit.point;
+            var exitSurfaceNormal = reverseHit.normal;
 
             // Calculate effective impact velocity.
             var angleFactor = Mathf.Abs(Vector3.Dot(shotDirectionNormalized, hit.normal));
@@ -93,20 +94,25 @@ namespace Assets.Scripts.Gunplay.Ballistics
             // Deflect.
             if (directImpactVelocity < target.Material.PenetrateAtVelocity)
             {
+                // Calculate the deflected bullet direction.
+                var reflectedDirection = Vector3.Reflect(shotDirectionNormalized, hit.normal);
+                var randomizedReflectedDirection = RandomRotate(reflectedDirection, 0.4f);
+
+                // Process the hit.
                 target.Hit(new BulletImpact
                 {
                     Type = BulletImpactType.Deflected,
                     EntryPoint = hit.point,
-                    DirectionNormalized = shotDirectionNormalized,
-                    SurfaceNormal = hit.normal,
+                    EntryDirectionNormalized = shotDirectionNormalized,
+                    EntrySurfaceNormal = hit.normal,
                     ExitPoint = exitPoint,
+                    ExitDirectionNormalized = reflectedDirection,
+                    ExitSurfaceNormal = exitSurfaceNormal,
                     BulletMass = bulletMass,
                     Velocity = directImpactVelocity,
                 });
 
                 // Simulate the deflected bullet, a.k.a. "ricochet".
-                var reflectedDirection = Vector3.Reflect(shotDirectionNormalized, hit.normal);
-                var randomizedReflectedDirection = RandomRotate(reflectedDirection, 0.4f);
                 var reducedVelocity = (velocity - directImpactVelocity) * Mathf.Clamp(target.Material.Bouncyness, 0, 1);
 
                 ShootProjectile(hit.point, randomizedReflectedDirection, bulletMass, reducedVelocity);
@@ -117,19 +123,23 @@ namespace Assets.Scripts.Gunplay.Ballistics
             // Pierce.
             if (velocity > target.Material.PierceAtVelocity)
             {
+                // Calculate the exit bullet direction.
+                var randomizedShotDirection = RandomRotate(shotDirectionNormalized, 0.1f);
+
                 target.Hit(new BulletImpact
                 {
                     Type = BulletImpactType.Pierced,
                     EntryPoint = hit.point,
-                    DirectionNormalized = shotDirectionNormalized,
-                    SurfaceNormal = hit.normal,
+                    EntryDirectionNormalized = shotDirectionNormalized,
+                    EntrySurfaceNormal = hit.normal,
                     ExitPoint = exitPoint,
+                    ExitDirectionNormalized = randomizedShotDirection,
+                    ExitSurfaceNormal = exitSurfaceNormal,
                     BulletMass = bulletMass,
                     Velocity = target.Material.PierceAtVelocity,
-                });
+                });                
 
                 // Simulate the bullet as it exits the target.
-                var randomizedShotDirection = RandomRotate(shotDirectionNormalized, 0.1f);
                 var remainingVelocity = velocity - target.Material.PierceAtVelocity;
 
                 ShootProjectile(exitPoint, randomizedShotDirection, bulletMass, remainingVelocity);
@@ -142,9 +152,11 @@ namespace Assets.Scripts.Gunplay.Ballistics
             {
                 Type = BulletImpactType.Penetrated,
                 EntryPoint = hit.point,
-                DirectionNormalized = shotDirectionNormalized,
-                SurfaceNormal = hit.normal,
+                EntryDirectionNormalized = shotDirectionNormalized,
+                EntrySurfaceNormal = hit.normal,
                 ExitPoint = exitPoint,
+                ExitDirectionNormalized = shotDirectionNormalized,
+                ExitSurfaceNormal = exitSurfaceNormal,
                 BulletMass = bulletMass,
                 Velocity = velocity,
             });

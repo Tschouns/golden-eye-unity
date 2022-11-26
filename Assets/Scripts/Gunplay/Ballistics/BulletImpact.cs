@@ -18,19 +18,29 @@ namespace Assets.Scripts.Gunplay.Ballistics
         public Vector3 EntryPoint { get; set; }
 
         /// <summary>
-        /// Gets or sets the hit direction -- as a normalized vector.
+        /// Gets or sets the entry direction -- as a normalized vector.
         /// </summary>
-        public Vector3 DirectionNormalized { get; set; }
+        public Vector3 EntryDirectionNormalized { get; set; }
 
         /// <summary>
-        /// Gets or sets the surface normal.
+        /// Gets or sets the entry surface normal.
         /// </summary>
-        public Vector3 SurfaceNormal { get; set; }
+        public Vector3 EntrySurfaceNormal { get; set; }
 
         /// <summary>
         /// Gets or sets the (hypothetical) bullet exit point, if the bullet were to pierce the target in a straight line.
         /// </summary>
         public Vector3 ExitPoint { get; set; }
+
+        /// <summary>
+        /// Gets or sets the exit direction -- as a normalized vector.
+        /// </summary>
+        public Vector3 ExitDirectionNormalized { get; set; }
+
+        /// <summary>
+        /// Gets or sets the exit surface normal.
+        /// </summary>
+        public Vector3 ExitSurfaceNormal { get; set; }
 
         /// <summary>
         /// Gets or sets the bullet mass.
@@ -50,7 +60,7 @@ namespace Assets.Scripts.Gunplay.Ballistics
         /// </returns>
         public Vector3 GetImpulse()
         {
-            return this.DirectionNormalized * this.Velocity * this.BulletMass;
+            return this.EntryDirectionNormalized * this.Velocity * this.BulletMass;
         }
 
         /// <summary>
