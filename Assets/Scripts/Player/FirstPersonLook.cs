@@ -1,11 +1,12 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Characters;
+using UnityEngine;
 
 namespace Assets.Scripts.Player
 {
     /// <summary>
     /// Reacts to player look axes input and controls player look direction -- i.e. rotates the player and camera.
     /// </summary>
-    public class FirstPersonLook : PlayerInputBase
+    public class FirstPersonLook : MonoBehaviour, INotifyOnDied
     {
         [SerializeField]
         private Transform playerCharacter;
@@ -17,6 +18,11 @@ namespace Assets.Scripts.Player
         private float mouseSensitivity = 1f;
 
         private float cameraRotationX = 0f;
+
+        public void NotifyOnDied()
+        {
+            this.enabled = false;
+        }
 
         private void Awake()
         {

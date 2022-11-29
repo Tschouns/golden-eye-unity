@@ -17,7 +17,6 @@ namespace Assets.Scripts.Player
         private Transform playerModel;
 
         private CharacterController characterController;
-        private PlayerInputBase[] playerInputBehaviours;
 
         private void Awake()
         {
@@ -25,10 +24,8 @@ namespace Assets.Scripts.Player
             Debug.Assert(this.playerModel != null);
 
             this.characterController = this.GetComponent<CharacterController>();
-            this.playerInputBehaviours = this.GetComponents<PlayerInputBase>();
 
             Debug.Assert(this.characterController != null);
-            Debug.Assert(this.playerInputBehaviours != null);
 
             this.health.Died += this.OnDied;
         }
@@ -38,11 +35,6 @@ namespace Assets.Scripts.Player
             Debug.Log("Player died!");
 
             this.characterController.enabled = false;
-
-            foreach (var inputBehaviour in this.playerInputBehaviours)
-            {
-                inputBehaviour.enabled = false;
-            }
 
             // "Unpack" player model.
             this.playerModel.parent = this.transform.parent;

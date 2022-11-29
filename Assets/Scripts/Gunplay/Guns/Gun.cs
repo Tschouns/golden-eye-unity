@@ -91,7 +91,7 @@ namespace Assets.Scripts.Gunplay.Guns
 
             this.properties.ShootSound.Play(this.muzzle.position);
 
-            var randomizedShotDirection = BallisticsHelper.RandomRotate(this.muzzle.forward, this.properties.MaxDeviationRadians);
+            var randomizedShotDirection = TransformHelper.RandomRotate(this.muzzle.forward, this.properties.MaxDeviationRadians);
 
             // TODO: add layer mask?
             BallisticsHelper.ShootProjectile(

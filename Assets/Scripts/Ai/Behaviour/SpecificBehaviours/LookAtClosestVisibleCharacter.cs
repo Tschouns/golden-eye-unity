@@ -24,11 +24,11 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
                     .OrderBy(c => Vector3.Distance(c.Head.Position, characterAccess.Character.Head.Position))
                     .First(c => c != characterAccess.Character);
 
-                characterAccess.LookAt(closest.Position);
+                characterAccess.Eyes.SetEyesFocus(closest.Head.Position);
             }
             else
             {
-                characterAccess.LookAhead();
+                characterAccess.Eyes.UnsetEyesFocus();
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using Assets.Scripts.Misc;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.Scripts.Gunplay.Ballistics
@@ -8,28 +9,6 @@ namespace Assets.Scripts.Gunplay.Ballistics
     /// </summary>
     public static class BallisticsHelper
     {
-        /// <summary>
-        /// Randomly rotates the specified vector by a random amount, no more than the maximum specified.
-        /// </summary>
-        /// <param name="direction">
-        /// The original vector
-        /// </param>
-        /// <param name="maxRadians">
-        /// The maximum radians by which to rotate the vector
-        /// </param>
-        /// <returns>
-        /// A randomly rotated vector
-        /// </returns>
-        public static Vector3 RandomRotate(Vector3 direction, float maxRadians)
-        {
-            var randomVector = new Vector3(Random.value, Random.value, Random.value).normalized;
-            var radians = Random.Range(0f, Mathf.Abs(maxRadians));
-
-            var rotatedVector = Vector3.RotateTowards(direction, randomVector, radians, 0f);
-
-            return rotatedVector;
-        }
-
         /// <summary>
         /// Simulates shooting a projectile. Calls targets (i.e. implementations of <see cref="IHitTarget"/>) when hit, so they
         /// can react to the bullet impact.
@@ -58,7 +37,6 @@ namespace Assets.Scripts.Gunplay.Ballistics
                 var target = hit.collider.GetComponentInParent<IHitTarget>();
                 if (target == null)
                 {
-                    Debug.LogWarning("Hit a non-target collider.");
                     continue;
                 }
 
@@ -96,7 +74,7 @@ namespace Assets.Scripts.Gunplay.Ballistics
             {
                 // Calculate the deflected bullet direction.
                 var reflectedDirection = Vector3.Reflect(shotDirectionNormalized, hit.normal);
-                var randomizedReflectedDirection = RandomRotate(reflectedDirection, 0.4f);
+                var randomizedReflectedDirection = TransformHelper.RandomRotate(reflectedDirection, 0.4f);
 
                 // Process the hit.
                 target.Hit(new BulletImpact
@@ -124,7 +102,7 @@ namespace Assets.Scripts.Gunplay.Ballistics
             if (velocity > target.Material.PierceAtVelocity)
             {
                 // Calculate the exit bullet direction.
-                var randomizedShotDirection = RandomRotate(shotDirectionNormalized, 0.1f);
+                var randomizedShotDirection = TransformHelper.RandomRotate(shotDirectionNormalized, 0.1f);
 
                 target.Hit(new BulletImpact
                 {

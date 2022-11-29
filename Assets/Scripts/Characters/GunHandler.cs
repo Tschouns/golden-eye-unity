@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.Damage;
-using Assets.Scripts.Gunplay.Guns;
+﻿using Assets.Scripts.Gunplay.Guns;
 using UnityEngine;
 
 namespace Assets.Scripts.Characters
@@ -7,7 +6,7 @@ namespace Assets.Scripts.Characters
     /// <summary>
     /// Implements <see cref="GunHandler"/>.
     /// </summary>
-    public class GunHandler : MonoBehaviour, IGunHandler
+    public class GunHandler : MonoBehaviour, IGunHandler, INotifyOnDied
     {
         [SerializeField]
         private Gun gun;
@@ -17,9 +16,6 @@ namespace Assets.Scripts.Characters
 
         [SerializeField]
         private Transform gunHolster;
-
-        [SerializeField]
-        private Health health;
 
         [SerializeField]
         private bool startEquipped = false;
@@ -78,14 +74,16 @@ namespace Assets.Scripts.Characters
             }
         }
 
+        public void NotifyOnDied()
+        {
+            this.Drop();
+        }
+
         private void Awake()
         {
             Debug.Assert(this.gun != null);
             Debug.Assert(this.gunHand != null);
             Debug.Assert(this.gunHolster != null);
-            Debug.Assert(this.health != null);
-
-            this.health.Died += () => this.Drop();
 
             if (this.startEquipped)
             {
