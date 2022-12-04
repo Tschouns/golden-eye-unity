@@ -11,6 +11,9 @@ namespace Assets.Scripts.Gunplay.Guns
     public class GunProperties : ScriptableObject, IVerifyable
     {
         [SerializeField]
+        private string uniqueName = string.Empty;
+
+        [SerializeField]
         private CartridgeSpec cartridge;
 
         [SerializeField]
@@ -26,6 +29,11 @@ namespace Assets.Scripts.Gunplay.Guns
 
         [SerializeField]
         private SimpleSoundEmitter shootSound;
+
+        /// <summary>
+        /// Gets the name which uniquely identifies the type of gun.
+        /// </summary>
+        public string UniqueName => this.uniqueName;
 
         /// <summary>
         /// Gets the cartridge specification.
@@ -54,6 +62,7 @@ namespace Assets.Scripts.Gunplay.Guns
 
         public void Verify()
         {
+            Debug.Assert(!string.IsNullOrEmpty(this.uniqueName));
             Debug.Assert(this.cartridge != null);
             Debug.Assert(this.fireRate > 0);
             Debug.Assert(this.shootSound != null);

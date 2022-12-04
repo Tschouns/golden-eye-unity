@@ -1,4 +1,5 @@
 using Assets.Scripts.Gunplay.Ballistics;
+using Assets.Scripts.Misc;
 using System.Collections;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ namespace Assets.Scripts.Gunplay.Guns
     /// Implements the mechanics of a gun.
     /// </summary>
     [RequireComponent(typeof(Rigidbody))]
-    public class Gun : MonoBehaviour, IGun
+    public class Gun : MonoBehaviour, IGun, ITogglePhysics
     {
         [SerializeField]
         private Transform muzzle;
@@ -16,9 +17,17 @@ namespace Assets.Scripts.Gunplay.Guns
         [SerializeField]
         private GunProperties properties;
 
+        [SerializeField]
+        private Rigidbody myRigidbody;
+
+        [SerializeField]
+        private bool startWithPhysics = false;
+
         private bool isTriggerActive = false;
         private bool isTriggerEntryProcessed = false;
         private bool isReady = true;
+
+        public string UniqueName => this.properties.UniqueName;
 
         public void Trigger()
         {
@@ -27,21 +36,33 @@ namespace Assets.Scripts.Gunplay.Guns
 
         public void ActivatePhysics()
         {
-            var rigidbody = this.GetComponent<Rigidbody>();
-            Debug.Assert(rigidbody != null);
+            this.myRigidbody.isKinematic = false;
+            this.myRigidbody.useGravity = true;
+            this.myRigidbody.constraints = RigidbodyConstraints.None;
+        }
 
-            rigidbody.isKinematic = false;
-            rigidbody.useGravity = true;
-            rigidbody.constraints = RigidbodyConstraints.None;
+        public void DeactivatePhysics()
+        {
+            this.myRigidbody.isKinematic = true;
+            this.myRigidbody.useGravity = false;
+            this.myRigidbody.constraints = RigidbodyConstraints.FreezeAll;
         }
 
         private void Awake()
         {
             Debug.Assert(this.muzzle != null);
             Debug.Assert(this.properties != null);
-            //Debug.Assert(this.soundSource != null);
-
+            Debug.Assert(this.myRigidbody != null);
             this.properties.Verify();
+
+            if (this.startWithPhysics)
+            {
+                this.ActivatePhysics();
+            }
+            else
+            {
+                this.DeactivatePhysics();
+            }
         }
 
         private void Update()
