@@ -32,5 +32,13 @@ namespace Assets.Scripts.Characters
         /// Gets a value indicating whether the character is alive.
         /// </summary>
         bool IsAlive { get; }
+
+        /// <summary>
+        /// Sets the head tilt, i.e. the head's local rotation around X, in degrees.
+        /// </summary>
+        /// <param name="tiltDeg">
+        /// The tilt value, in degrees
+        /// </param>
+        void TiltHead(float tiltDeg);
     }
 }

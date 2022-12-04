@@ -16,6 +16,11 @@ namespace Assets.Scripts.Ai.Behaviour
         ICharacter Character { get; }
 
         /// <summary>
+        /// Gets access to the character's eyes.
+        /// </summary>
+        IEyes Eyes { get; }
+
+        /// <summary>
         /// Gets the character's perception.
         /// </summary>
         IPerception Perception { get; }
@@ -52,16 +57,16 @@ namespace Assets.Scripts.Ai.Behaviour
         void RunTo(Vector3 destination);
 
         /// <summary>
-        /// Makes the character look at the specified point.
+        /// Makes the character turn towards the specified point.
         /// </summary>
         /// <param name="targetPoint">
         /// The point to look at
         /// </param>
-        void LookAt(Vector3 targetPoint);
+        void TurnTowardsPoint(Vector3 targetPoint);
 
         /// <summary>
-        /// Makes the character look ahead, i.e. in moving direction.
+        /// Makes the character turn ahead, i.e. in moving direction.
         /// </summary>
-        void LookAhead();
+        void TurnAhead();
     }
 }

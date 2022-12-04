@@ -6,6 +6,7 @@ using Assets.Scripts.Ai.Patrols;
 using Assets.Scripts.Ai.Perception;
 using Assets.Scripts.Characters;
 using Assets.Scripts.Damage;
+using Assets.Scripts.Misc;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
@@ -16,19 +17,19 @@ namespace Assets.Scripts.Ai
     /// Implements the A.I. of a military NPC.
     /// </summary>
     [RequireComponent(typeof(NavMeshAgent))]
-    public class MilitaryAi : MonoBehaviour
+    public class MilitaryAi : MonoBehaviour, INotifyOnDied
     {
         [SerializeField]
         private Character thisCharacter;
+
+        [SerializeField]
+        private EyeMovement eyeMovement;
 
         [SerializeField]
         private GunHandler gunHandler;
 
         [SerializeField]
         private NavMeshAgent navMeshAgent;
-
-        [SerializeField]
-        private Health health;
 
         [SerializeField]
         private float walkingSpeed = 1.0f;
@@ -56,14 +57,22 @@ namespace Assets.Scripts.Ai
 
         private Vector3? currentFocusPoint = null;
 
+        public void NotifyOnDied()
+        {
+            this.enabled = false;
+
+            this.navMeshAgent.isStopped = true;
+            this.navMeshAgent.enabled = false;
+        }
+
         private void Awake()
         {
             Debug.Assert(this.thisCharacter != null);
+            Debug.Assert(this.eyeMovement != null);
+            Debug.Assert(this.gunHandler != null);
             Debug.Assert(this.navMeshAgent != null);
-            Debug.Assert(this.health != null);
 
             this.navMeshAgent.angularSpeed = this.angularSpeed;
-            this.health.Died += this.OnDied;
 
             this.characterManager = FindObjectOfType<CharacterManager>();
             Debug.Assert(this.characterManager != null);
@@ -86,7 +95,7 @@ namespace Assets.Scripts.Ai
             var engageBehaviour = new DoWithTimeout(
                 new DoSimultaneouslyUntilAllAreDone(
                     new StandStill(),
-                    new LookAtClosestVisibleTarget(),
+                    new FaceClosestVisibleTarget(),
                     new CycleThrough(
                         new DoWithTimeout(new Shoot(), 1.5f),
                         new DoWithTimeout(new DoNothing(), 1f))),
@@ -102,11 +111,6 @@ namespace Assets.Scripts.Ai
 
         private void Update()
         {
-            if (!this.health.IsAlive)
-            {
-                return;
-            }
-
             this.perception.Update();
             this.behaviour.Update(this.characterAccess);
 
@@ -116,25 +120,23 @@ namespace Assets.Scripts.Ai
             }
         }
 
-        private void OnDied()
-        {
-            this.navMeshAgent.isStopped = true;
-        }
-
+        /// <summary>
+        /// Turns the entire NPC, and tilts the head, towards the specified target point.
+        /// </summary>
         private void TurnTowards(Vector3 targetPoint)
         {
-            if (!this.health.IsAlive)
-            {
-                return;
-            }
-
-            var maxRadians = this.angularSpeed * Mathf.Deg2Rad * Time.deltaTime;
             var targetLookDirection = targetPoint - this.thisCharacter.Head.Position;
+            var updatedLookDirection = TransformHelper.RotateTowardsAtSpeed(this.thisCharacter.Head.LookDirection, targetLookDirection, this.angularSpeed);
 
-            // Turn around Y. Don't change elevation (yet).
-            var updatedLookDirection = Vector3.RotateTowards(this.thisCharacter.Head.LookDirection, targetLookDirection, maxRadians, 1000);
+            // Tilt the characters head.            
+            updatedLookDirection.Normalize();
+            var headTilt = -(Mathf.Asin(updatedLookDirection.y) * Mathf.Rad2Deg);
+
+            Debug.Log(headTilt);
+            this.thisCharacter.TiltHead(headTilt);
+            
+            // Turn the whole NPC around Y. Don't change elevation.
             updatedLookDirection.y = 0;
-
             this.transform.LookAt(this.transform.position + updatedLookDirection);
         }
 
@@ -153,6 +155,7 @@ namespace Assets.Scripts.Ai
             }
 
             public ICharacter Character => this.ai.thisCharacter;
+            public IEyes Eyes => this.ai.eyeMovement;
             public IPerception Perception => this.ai.perception;
             public IGunHandler GunHandler => this.ai.gunHandler;
             public Vector3 CurrentDestination => this.ai.navMeshAgent.destination;
@@ -170,14 +173,15 @@ namespace Assets.Scripts.Ai
                 this.ai.navMeshAgent.SetDestination(destination);
             }
 
-            public void LookAt(Vector3 targetPoint)
+            public void TurnTowardsPoint(Vector3 targetPoint)
             {
                 this.ai.currentFocusPoint = targetPoint;
                 this.ai.navMeshAgent.angularSpeed = 0;
             }
 
-            public void LookAhead()
+            public void TurnAhead()
             {
+                this.ai.thisCharacter.TiltHead(0);
                 this.ai.currentFocusPoint = null;
                 this.ai.navMeshAgent.angularSpeed = this.ai.angularSpeed;
             }

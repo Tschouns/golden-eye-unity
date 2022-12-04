@@ -1,3 +1,4 @@
+using Assets.Scripts.Characters;
 using Assets.Scripts.Controls;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ namespace Assets.Scripts.Player
     /// Reacts to player input and controls player movement.
     /// </summary>
     [RequireComponent(typeof(CharacterController))]
-    public class FirstPersonMovement : PlayerInputBase, IMove
+    public class FirstPersonMovement : MonoBehaviour, IMove, INotifyOnDied
     {
         [SerializeField]
         private float walkingSpeed = 3f;
@@ -27,6 +28,11 @@ namespace Assets.Scripts.Player
         {
             get => this.runningSpeed;
             set => this.runningSpeed = value;
+        }
+
+        public void NotifyOnDied()
+        {
+            this.enabled = false;
         }
 
         private void Awake()

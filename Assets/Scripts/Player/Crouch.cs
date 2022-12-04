@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Controls;
+﻿using Assets.Scripts.Characters;
+using Assets.Scripts.Controls;
 using UnityEngine;
 
 namespace Assets.Scripts.Player
@@ -8,7 +9,7 @@ namespace Assets.Scripts.Player
     /// </summary>
     [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(FirstPersonMovement))]
-    public class Crouch : PlayerInputBase
+    public class Crouch : MonoBehaviour, INotifyOnDied
     {
         [SerializeField]
         private Transform head;
@@ -29,6 +30,11 @@ namespace Assets.Scripts.Player
         private float originalRunningSpeed;
 
         private bool isCrouching;
+
+        public void NotifyOnDied()
+        {
+            this.enabled = false;
+        }
 
         private void Awake()
         {

@@ -15,7 +15,7 @@
 
         public void Update(ICharacterAccess characterAccess)
         {
-            characterAccess.LookAhead();
+            characterAccess.Eyes.UnsetEyesFocus();
         }
     }
 }

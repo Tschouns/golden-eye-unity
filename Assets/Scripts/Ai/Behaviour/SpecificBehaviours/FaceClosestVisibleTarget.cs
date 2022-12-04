@@ -4,9 +4,9 @@ using UnityEngine;
 namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
 {
     /// <summary>
-    /// A character continuously looks the closest active target in view.
+    /// A character continuously faces the closest active target in view.
     /// </summary>
-    public class LookAtClosestVisibleTarget : IBehaviour
+    public class FaceClosestVisibleTarget : IBehaviour
     {
         public string Description { get; } = "Look at closest visible target.";
 
@@ -28,11 +28,13 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
                     .OrderBy(c => Vector3.Distance(c.Head.Position, characterAccess.Character.Head.Position))
                     .First(c => c != characterAccess.Character);
 
-                characterAccess.LookAt(closest.Position);
+                characterAccess.TurnTowardsPoint(closest.Head.Position);
+                characterAccess.Eyes.SetEyesFocus(closest.Head.Position);
             }
             else
             {
-                characterAccess.LookAhead();
+                characterAccess.TurnAhead();
+                characterAccess.Eyes.UnsetEyesFocus();
             }
         }
     }

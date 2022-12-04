@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Controls;
+﻿using Assets.Scripts.Characters;
+using Assets.Scripts.Controls;
 using Assets.Scripts.Gunplay.Guns;
 using Assets.Scripts.Gunplay.Inventory;
 using UnityEngine;
@@ -8,7 +9,7 @@ namespace Assets.Scripts.Player
     /// <summary>
     /// Allows a character to have and manipulate a gun.
     /// </summary>
-    public class Shoot : PlayerInputBase
+    public class Shoot : MonoBehaviour, INotifyOnDied
     {
         [SerializeField]
         private GunInventory inventory;
@@ -17,6 +18,14 @@ namespace Assets.Scripts.Player
         private Transform gunHand;
 
         private Gun activeGun;
+
+        public void NotifyOnDied()
+        {
+            this.enabled = false;
+
+            // Drop the gun.
+            this.activeGun?.ActivatePhysics();
+        }
 
         private void Awake()
         {
