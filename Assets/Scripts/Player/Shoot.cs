@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Controls;
 using Assets.Scripts.Gunplay.Guns;
+using Assets.Scripts.Gunplay.Inventory;
 using UnityEngine;
 
 namespace Assets.Scripts.Player
@@ -10,7 +11,18 @@ namespace Assets.Scripts.Player
     public class Shoot : PlayerInputBase
     {
         [SerializeField]
+        private GunInventory inventory;
+
+        [SerializeField]
+        private Transform gunHand;
+
         private Gun activeGun;
+
+        private void Awake()
+        {
+            Debug.Assert(this.inventory != null);
+            Debug.Assert(this.gunHand != null);
+        }
 
         private void Update()
         {
@@ -18,6 +30,27 @@ namespace Assets.Scripts.Player
                 ControlsProvider.Actions.Trigger)
             {
                 this.activeGun.Trigger();
+            }
+
+            if (ControlsProvider.Actions.CycleWeapon)
+            {
+                this.CycleGuns();
+            }
+        }
+
+        private void CycleGuns()
+        {
+            if (this.activeGun != null)
+            {
+                GunHelper.HideGun(this.activeGun);
+            }
+
+            // Switch gun.
+            this.activeGun = this.inventory.GetNextGun();
+
+            if (this.activeGun != null)
+            {
+                GunHelper.ProduceGun(this.activeGun, this.gunHand);
             }
         }
     }
