@@ -1,5 +1,4 @@
-﻿
-namespace Assets.Scripts.Characters
+﻿namespace Assets.Scripts.Damage
 {
     /// <summary>
     /// Allows a component to be notified when a character dies.

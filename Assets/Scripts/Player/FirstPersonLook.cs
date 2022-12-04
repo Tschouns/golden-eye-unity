@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Characters;
+﻿using Assets.Scripts.Damage;
 using UnityEngine;
 
 namespace Assets.Scripts.Player

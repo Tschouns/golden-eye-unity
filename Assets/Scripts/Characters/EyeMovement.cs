@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Misc;
+﻿using Assets.Scripts.Damage;
+using Assets.Scripts.Misc;
 using System.Collections;
 using UnityEngine;
 
