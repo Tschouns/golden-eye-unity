@@ -53,6 +53,11 @@ namespace Assets.Scripts.Gunplay.Ballistics
         public float Velocity { get; set; }
 
         /// <summary>
+        /// Gets or sets the material hit by the bullet.
+        /// </summary>
+        public IBallisticMaterial HitMaterial { get; set; }
+
+        /// <summary>
         /// Calculates the impulse vector for the impact, defined as J = mv2 - mv1.
         /// </summary>
         /// <returns>

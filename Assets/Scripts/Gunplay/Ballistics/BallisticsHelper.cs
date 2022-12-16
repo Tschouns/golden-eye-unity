@@ -88,6 +88,7 @@ namespace Assets.Scripts.Gunplay.Ballistics
                     ExitSurfaceNormal = exitSurfaceNormal,
                     BulletMass = bulletMass,
                     Velocity = directImpactVelocity,
+                    HitMaterial = target.Material,
                 });
 
                 // Simulate the deflected bullet, a.k.a. "ricochet".
@@ -115,6 +116,7 @@ namespace Assets.Scripts.Gunplay.Ballistics
                     ExitSurfaceNormal = exitSurfaceNormal,
                     BulletMass = bulletMass,
                     Velocity = target.Material.PierceAtVelocity,
+                    HitMaterial = target.Material,
                 });                
 
                 // Simulate the bullet as it exits the target.
@@ -137,6 +139,7 @@ namespace Assets.Scripts.Gunplay.Ballistics
                 ExitSurfaceNormal = exitSurfaceNormal,
                 BulletMass = bulletMass,
                 Velocity = velocity,
+                HitMaterial = target.Material,
             });
         }
     }
