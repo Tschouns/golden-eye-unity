@@ -8,7 +8,7 @@ namespace Assets.Scripts.Gunplay.Guns
     /// Specifies the properties of a specific type of gun.
     /// </summary>
     [CreateAssetMenu(fileName = "GunProperties", menuName = "Scriptable Objects/Gun Properties")]
-    public class GunProperties : ScriptableObject, IVerifyable
+    public class GunProperties : ScriptableObject, IGunProperties, IVerifyable
     {
         [SerializeField]
         private string uniqueName = string.Empty;
@@ -24,35 +24,34 @@ namespace Assets.Scripts.Gunplay.Guns
         private bool isFullyAutomatic = false;
 
         [SerializeField]
+        private bool isDoubleAction = false;
+
+        [SerializeField]
+        private int clipSize = 10;
+
+        [SerializeField]
+        private float reloadTime = 1.5f;
+
+        [SerializeField]
         [Range(0, 30)]
         private float maxDeviationDegrees = 5f;
 
         [SerializeField]
         private SimpleSoundEmitter shootSound;
 
-        /// <summary>
-        /// Gets the name which uniquely identifies the type of gun.
-        /// </summary>
+        [SerializeField]
+        private SimpleSoundEmitter dryFireSound;
+
+        [SerializeField]
+        private SimpleSoundEmitter reloadSound;
+
         public string UniqueName => this.uniqueName;
-
-        /// <summary>
-        /// Gets the cartridge specification.
-        /// </summary>
-        public CartridgeSpec Cartridge => this.cartridge;
-
-        /// <summary>
-        /// Gets the gun's fire rate.
-        /// </summary>
+        public ICartridgeSpec Cartridge => this.cartridge;
         public int FireRate => this.fireRate;
-
-        /// <summary>
-        /// Gets a value indicating whether the gun is fully automatic, i.e. the trigger can be held down to rapid-fire.
-        /// </summary>
         public bool IsFullyAutomatic => this.isFullyAutomatic;
-
-        /// <summary>
-        /// Gets the maximum angular deviation [rad] for any shot fired.
-        /// </summary>
+        public bool IsDoubleAction => this.isDoubleAction;
+        public int ClipSize => this.clipSize;
+        public float ReloadTime => this.reloadTime;
         public float MaxDeviationRadians => this.maxDeviationDegrees * Mathf.Deg2Rad;
 
         /// <summary>
@@ -60,13 +59,28 @@ namespace Assets.Scripts.Gunplay.Guns
         /// </summary>
         public SimpleSoundEmitter ShootSound => this.shootSound;
 
+        /// <summary>
+        /// Gets the sound to play when dry-firing.
+        /// </summary>
+        public SimpleSoundEmitter DryFireSound => this.dryFireSound;
+
+        /// <summary>
+        /// Gets the sound to play when reloading.
+        /// </summary>
+        public SimpleSoundEmitter ReloadSound => this.reloadSound;
+
         public void Verify()
         {
             Debug.Assert(!string.IsNullOrEmpty(this.uniqueName));
             Debug.Assert(this.cartridge != null);
             Debug.Assert(this.fireRate > 0);
             Debug.Assert(this.shootSound != null);
+            Debug.Assert(this.dryFireSound != null);
+            Debug.Assert(this.reloadSound != null);
+
             this.shootSound.Verify();
+            this.dryFireSound.Verify();
+            this.reloadSound.Verify();
         }
     }
 }

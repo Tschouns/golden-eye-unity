@@ -8,7 +8,7 @@ namespace Assets.Scripts.Characters
     public interface IGunHandler
     {
         /// <summary>
-        /// Gets character's the gun.
+        /// Gets the character's gun.
         /// </summary>
         IGun Gun { get; }
 
@@ -16,6 +16,11 @@ namespace Assets.Scripts.Characters
         /// Gets a value indicating whether the gun is currently equipped.
         /// </summary>
         bool IsEquipped { get; }
+
+        /// <summary>
+        /// Gets the amount of time it takes the character to equip/unequip a gun.
+        /// </summary>
+        float EquipTime { get; }
 
         /// <summary>
         /// Makes the character equip the gun.
@@ -36,5 +41,17 @@ namespace Assets.Scripts.Characters
         /// Makes the character shoot the gun.
         /// </summary>
         void Shoot();
+
+        /// <summary>
+        /// Reloads the gun, using the specified available number of bullets, and returns the number of bullets
+        /// actually loaded into the gun.
+        /// </summary>
+        /// <param name="availableNumberOfBullets">
+        /// The number of bullets available
+        /// </param>
+        /// <returns>
+        /// The number of bullets actually loaded into the gun
+        /// </returns>
+        int Reload(int availableNumberOfBullets);
     }
 }

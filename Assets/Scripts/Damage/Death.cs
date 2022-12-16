@@ -1,8 +1,6 @@
-using Assets.Scripts.Characters;
-using Assets.Scripts.Damage;
 using UnityEngine;
 
-namespace Assets.Scripts
+namespace Assets.Scripts.Damage
 {
     /// <summary>
     /// Implements death and dying, when a characters health runs out.

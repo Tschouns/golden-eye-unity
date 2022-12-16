@@ -14,7 +14,7 @@ namespace Assets.Scripts.Gunplay.Inventory
         private readonly IList<Gun> guns = new List<Gun>();
 
         [SerializeField]
-        private Gun[] initialGuns;
+        private Gun[] initialGunPrefabs;
 
         private int index = 0;
 
@@ -32,14 +32,16 @@ namespace Assets.Scripts.Gunplay.Inventory
 
         public bool Contains(Gun gun)
         {
-            return this.guns.Select(g => g.UniqueName).Contains(gun.UniqueName);
+            return this.guns.Select(g => g.Properties.UniqueName).Contains(gun.Properties.UniqueName);
         }
 
         public Gun GetNextGun()
         {
             if (this.guns.Any())
             {
-                return this.guns[this.index++ % this.guns.Count];
+                this.index = (this.index + 1) % this.guns.Count;
+
+                return this.guns[index];
             }
             else
             {
@@ -49,12 +51,14 @@ namespace Assets.Scripts.Gunplay.Inventory
 
         private void Awake()
         {
-            if (this.initialGuns != null)
+            if (this.initialGunPrefabs != null)
             {
-                foreach (var gun in this.initialGuns)
+                foreach (var gun in this.initialGunPrefabs)
                 {
-                    GunHelper.HideGun(gun);
-                    this.AddGun(gun);
+                    var gunInstance = Instantiate(gun);
+                    GunHelper.HideGun(gunInstance);
+
+                    this.AddGun(gunInstance);
                 }
             }
         }

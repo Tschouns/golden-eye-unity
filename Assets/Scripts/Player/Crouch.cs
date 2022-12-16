@@ -1,5 +1,5 @@
-﻿using Assets.Scripts.Characters;
-using Assets.Scripts.Controls;
+﻿using Assets.Scripts.Controls;
+using Assets.Scripts.Damage;
 using UnityEngine;
 
 namespace Assets.Scripts.Player

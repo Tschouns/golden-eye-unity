@@ -23,15 +23,38 @@ namespace Assets.Scripts.Gunplay.Guns
         [SerializeField]
         private bool startWithPhysics = false;
 
+        [SerializeField]
+        private bool startLoaded = true;
+
         private bool isTriggerActive = false;
         private bool isTriggerEntryProcessed = false;
         private bool isReady = true;
+        private bool isCocked = true;
 
-        public string UniqueName => this.properties.UniqueName;
+        public IGunProperties Properties => this.properties;
+
+        public int CurrentNumberOfBullets { get; private set; }
 
         public void Trigger()
         {
             this.isTriggerActive = true;
+        }
+
+        public int Reload(int availableNumberOfBullets)
+        {
+            if (this.CurrentNumberOfBullets >= this.Properties.ClipSize)
+            {
+                return 0;
+            }
+
+            var numberOfBulletsToTake = Mathf.Min(availableNumberOfBullets, this.Properties.ClipSize - this.CurrentNumberOfBullets);
+            this.CurrentNumberOfBullets += numberOfBulletsToTake;
+
+            this.isCocked = true;
+            this.properties.ReloadSound.Play(this.transform.position);
+            this.StartCoroutine(this.ResetReadynessAfter(this.properties.ReloadTime));
+
+            return numberOfBulletsToTake;
         }
 
         public void ActivatePhysics()
@@ -63,6 +86,15 @@ namespace Assets.Scripts.Gunplay.Guns
             {
                 this.DeactivatePhysics();
             }
+
+            if (this.startLoaded)
+            {
+                this.CurrentNumberOfBullets = this.properties.ClipSize;
+            }
+            else
+            {
+                this.CurrentNumberOfBullets = 0;
+            }
         }
 
         private void Update()
@@ -84,21 +116,36 @@ namespace Assets.Scripts.Gunplay.Guns
 
         private bool TryShoot()
         {
-            if (!this.isReady)
+            if (!this.isReady ||
+                !this.isCocked)
             {
                 return false;
             }
 
-            this.properties.ShootSound.Play(this.muzzle.position);
+            if (this.CurrentNumberOfBullets <= 0)
+            {
+                // Dry-fire.
+                this.properties.DryFireSound.Play(this.transform.position);
+                this.StartCoroutine(this.ResetReadynessAfter(1f / this.properties.FireRate));
+                
+                if (!this.properties.IsDoubleAction)
+                {
+                    this.isCocked = false;
+                }
 
+                return false;
+            }
+
+            // Shoot.
             var randomizedShotDirection = TransformHelper.RandomRotate(this.muzzle.forward, this.properties.MaxDeviationRadians);
-
-            // TODO: add layer mask?
             BallisticsHelper.ShootProjectile(
                 this.muzzle.position,
                 randomizedShotDirection,
                 this.properties.Cartridge.BulletMass,
                 this.properties.Cartridge.MuzzleVelocity);
+
+            this.CurrentNumberOfBullets--;
+            this.properties.ShootSound.Play(this.muzzle.position);
 
             // Cooldown.
             this.StartCoroutine(this.ResetReadynessAfter(1f / this.properties.FireRate));

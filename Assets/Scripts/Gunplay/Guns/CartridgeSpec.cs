@@ -7,8 +7,11 @@ namespace Assets.Scripts.Gunplay.Guns
     /// Specifies the properties of a specific cartridge.
     /// </summary>
     [CreateAssetMenu(fileName = "CartridgeSpec", menuName = "Scriptable Objects/Cartridge Spec")]
-    public class CartridgeSpec : ScriptableObject, IVerifyable
+    public class CartridgeSpec : ScriptableObject, ICartridgeSpec, IVerifyable
     {
+        [SerializeField]
+        private string uniqueName;
+
         [SerializeField]
         [Range(0.0001f, 1f)]
         private float bulletMass = 0.00745f; // 9x19mm Para. FMJ
@@ -17,20 +20,25 @@ namespace Assets.Scripts.Gunplay.Guns
         [Range(100f, 5000f)]
         private float muzzleVelocity = 360; // 9x19mm Para. FMJ
 
-        /// <summary>
-        /// Gets the mass of the bullets.
-        /// </summary>
-        public float BulletMass => this.bulletMass;
+        [SerializeField]
+        private int maxNumberOfBullets = 100;
 
-        /// <summary>
-        /// Gets the muzzle velocity.
-        /// </summary>
+        [SerializeField]
+        private int startingNumberOfBullets = 30;
+
+        public string UniqueName => this.uniqueName;
+        public float BulletMass => this.bulletMass;
         public float MuzzleVelocity => this.muzzleVelocity;
+        public int MaxNumberOfInventoryBullets => this.maxNumberOfBullets;
+        public int InitialNumberOfInventoryBullets => this.startingNumberOfBullets;
 
         public void Verify()
         {
+            Debug.Assert(!string.IsNullOrEmpty(this.uniqueName));
             Debug.Assert(this.bulletMass > 0);
             Debug.Assert(this.muzzleVelocity > 0);
+            Debug.Assert(this.maxNumberOfBullets > 0);
+            Debug.Assert(this.startingNumberOfBullets > 0);
         }
     }
 }
