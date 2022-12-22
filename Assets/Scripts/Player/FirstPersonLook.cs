@@ -30,6 +30,9 @@ namespace Assets.Scripts.Player
             Debug.Assert(this.firstPersonCamera != null);
 
             Cursor.lockState = CursorLockMode.Locked;
+#if UNITY_EDITOR
+            mouseSensitivity *= 20;
+#endif
         }
 
         private void Update()

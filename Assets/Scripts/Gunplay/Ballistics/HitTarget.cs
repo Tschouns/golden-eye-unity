@@ -13,8 +13,10 @@ namespace Assets.Scripts.Gunplay.Ballistics
         [SerializeField]
         private BallisticMaterial ballisticMaterial;
 
+#if UNITY_EDITOR
         [SerializeField]
         private GameObject debugHitIndicatorPrefab;
+#endif
 
         private IHitEffect[] hitEffects;
 
@@ -22,13 +24,15 @@ namespace Assets.Scripts.Gunplay.Ballistics
 
         public void Hit(BulletImpact impact)
         {
+#if UNITY_EDITOR
             if (this.debugHitIndicatorPrefab != null)
             {
                 Instantiate(
                     this.debugHitIndicatorPrefab,
                     impact.EntryPoint,
                     Quaternion.identity,
-                    this.transform);
+                    this.transform
+                );
 
                 if (impact.Type == BulletImpactType.Pierced)
                 {
@@ -36,9 +40,11 @@ namespace Assets.Scripts.Gunplay.Ballistics
                         this.debugHitIndicatorPrefab,
                         impact.ExitPoint,
                         Quaternion.identity,
-                        this.transform);
+                        this.transform
+                    );
                 }
             }
+#endif
 
             Array.ForEach(this.hitEffects, e => e.ReactToImpact(impact));
         }

@@ -26,10 +26,19 @@ namespace Assets.Scripts.Gunplay.Ballistics
         private AbstractSoundEmitter penetratedSoundEmitter;
 
         [SerializeField]
+        private AbstractSoundEmitter deflectedSoundEmitter;
+
+        [SerializeField]
         private AbstractSoundEmitter piercedSoundEmitter;
 
         [SerializeField]
-        private AbstractSoundEmitter deflectedSoundEmitter;
+        private GameObject[] penetratedParticleEffectPrefab = new GameObject[1];
+
+        [SerializeField]
+        private GameObject[] deflectedParticleEffectPrefab = new GameObject[1];
+
+        [SerializeField]
+        private GameObject[] piercedParticleEffectPrefab = new GameObject[1];
 
         public float PenetrateAtVelocity => this.penetrateAtVelocity;
         public float PierceAtVelocity => this.pierceAtVelocity;
@@ -37,6 +46,12 @@ namespace Assets.Scripts.Gunplay.Ballistics
         public ISoundEmitter PenetratedSoundEmitter => this.penetratedSoundEmitter;
         public ISoundEmitter PiercedSoundEmitter => this.piercedSoundEmitter;
         public ISoundEmitter DeflectedSoundEmitter => this.deflectedSoundEmitter;
+
+        public GameObject[] PenetratedParticleEffectPrefab => this.penetratedParticleEffectPrefab;
+
+        public GameObject[] PiercedParticleEffectPrefab => this.piercedParticleEffectPrefab;
+
+        public GameObject[] DeflectedParticleEffectPrefab => this.deflectedParticleEffectPrefab;
 
         public void Verify()
         {
@@ -55,6 +70,18 @@ namespace Assets.Scripts.Gunplay.Ballistics
             this.penetratedSoundEmitter.Verify();
             this.piercedSoundEmitter.Verify();
             this.deflectedSoundEmitter.Verify();
+            Debug.Assert(
+                this.penetratedParticleEffectPrefab is not null,
+                "The Prefab for the 'Penetrated Particle Effect' must not be null!"
+            );
+            Debug.Assert(
+                this.piercedParticleEffectPrefab is not null,
+                "The Prefab for the 'Pierced Particle Effect' must not be null!"
+            );
+            Debug.Assert(
+                this.deflectedParticleEffectPrefab is not null,
+                "The Prefab for the 'Deflected Particle Effect' must not be null!"
+            );
         }
     }
 }
