@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Sound;
+using UnityEngine;
 
 namespace Assets.Scripts.Gunplay.Ballistics
 {
@@ -37,5 +38,20 @@ namespace Assets.Scripts.Gunplay.Ballistics
         /// Gets the SoundEmitter for the "deflected" sound.
         /// </summary>
         ISoundEmitter DeflectedSoundEmitter { get; }
+
+        /// <summary>
+        /// Gets the prefab for the "penetrated" particle effect.
+        /// </summary>
+        GameObject[] PenetratedParticleEffectPrefab { get; }
+
+        /// <summary>
+        /// Gets the prefab for the "pierced" particle effect.
+        /// </summary>
+        GameObject[] PiercedParticleEffectPrefab { get; }
+
+        /// <summary>
+        /// Gets the prefab for the "deflected" particle effect.
+        /// </summary>
+        GameObject[] DeflectedParticleEffectPrefab { get; }
     }
 }
