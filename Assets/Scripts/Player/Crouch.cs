@@ -38,13 +38,13 @@ namespace Assets.Scripts.Player
 
         private void Awake()
         {
-            Debug.Assert(this.head != null);
+            Debug.Assert(this.head != null, "Head is not set.");
 
             this.characterController = this.GetComponent<CharacterController>();
-            Debug.Assert(this.characterController != null);
+            Debug.Assert(this.characterController != null, "Character controller is not set.");
 
             this.movement = this.GetComponent<IMove>();
-            Debug.Assert(this.movement != null);
+            Debug.Assert(this.movement != null, "Movement is not set.");
 
             this.originalControllerHeight = this.characterController.height;
             this.originalHeadHeight = this.head.localPosition.y;

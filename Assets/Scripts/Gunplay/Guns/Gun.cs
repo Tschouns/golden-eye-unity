@@ -73,9 +73,9 @@ namespace Assets.Scripts.Gunplay.Guns
 
         private void Awake()
         {
-            Debug.Assert(this.muzzle != null);
-            Debug.Assert(this.properties != null);
-            Debug.Assert(this.myRigidbody != null);
+            Debug.Assert(this.muzzle != null, "Muzzle is not set.");
+            Debug.Assert(this.properties != null, "Properties are not set.");
+            Debug.Assert(this.myRigidbody != null, "Rigidbody is not set.");
             this.properties.Verify();
 
             if (this.startWithPhysics)

@@ -20,12 +20,12 @@ namespace Assets.Scripts.Player
 
         private void Awake()
         {
-            Debug.Assert(this.health != null);
-            Debug.Assert(this.playerModel != null);
+            Debug.Assert(this.health != null, "Health is not set.");
+            Debug.Assert(this.playerModel != null, "Player model is not set.");
 
             this.characterController = this.GetComponent<CharacterController>();
 
-            Debug.Assert(this.characterController != null);
+            Debug.Assert(this.characterController != null, "Character controller is not set.");
 
             this.health.Died += this.OnDied;
         }

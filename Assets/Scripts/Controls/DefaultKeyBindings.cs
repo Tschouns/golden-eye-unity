@@ -15,5 +15,6 @@ namespace Assets.Scripts.Controls
         public KeyCode ToggleCrouch => KeyCode.LeftControl;
         public KeyCode Reload => KeyCode.R;
         public KeyCode CycleWeapon => KeyCode.C;
+        public KeyCode TogglePause => KeyCode.P;
     }
 }

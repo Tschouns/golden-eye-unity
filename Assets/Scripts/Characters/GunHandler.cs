@@ -154,10 +154,10 @@ namespace Assets.Scripts.Characters
 
         private void Awake()
         {
-            Debug.Assert(this.gunHand != null);
-            Debug.Assert(this.rotatingArm != null);
-            Debug.Assert(this.gunHolster != null);
-            Debug.Assert(this.equipSound != null);
+            Debug.Assert(this.gunHand != null, "Gun hand is not set.");
+            Debug.Assert(this.rotatingArm != null, "Rotating arm is not set.");
+            Debug.Assert(this.gunHolster != null, "Gun holster is not set.");
+            Debug.Assert(this.equipSound != null, "Equip sound is not set.");
 
             this.equipSound.Verify();
 

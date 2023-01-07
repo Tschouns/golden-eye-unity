@@ -26,21 +26,23 @@ namespace Assets.Scripts.Player
 
         private void Awake()
         {
-            Debug.Assert(this.playerCharacter != null);
-            Debug.Assert(this.firstPersonCamera != null);
+            Debug.Assert(this.playerCharacter != null, "Player character is not set.");
+            Debug.Assert(this.firstPersonCamera != null, "First person camera is not set.");
 
             Cursor.lockState = CursorLockMode.Locked;
+            // Hint: Because the webGL Build has a completely different Behaviour, we scale the mouse sensitivity up for the editor.
+            // This is not a perfect solution, because it creates a different output for different Environments, but it works for now.
 #if UNITY_EDITOR
-            mouseSensitivity *= 20;
+            this.mouseSensitivity *= 20;
 #endif
         }
 
         private void Update()
         {
-            var mouseX = Input.GetAxis("Mouse X");
-            var mouseY = Input.GetAxis("Mouse Y");
+            float mouseX = Input.GetAxis("Mouse X");
+            float mouseY = Input.GetAxis("Mouse Y");
 
-            var playerRrotationY = mouseX * this.mouseSensitivity * Time.deltaTime;
+            float playerRrotationY = mouseX * this.mouseSensitivity * Time.deltaTime;
 
             this.cameraRotationX += -mouseY * this.mouseSensitivity * Time.deltaTime;
             this.cameraRotationX = Mathf.Clamp(this.cameraRotationX, -90f, 90f);

@@ -1,5 +1,4 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets.Scripts.Controls
 {
@@ -16,5 +15,6 @@ namespace Assets.Scripts.Controls
         KeyCode ToggleCrouch { get; }
         KeyCode Reload { get; }
         KeyCode CycleWeapon { get; }
+        KeyCode TogglePause { get; }
     }
 }

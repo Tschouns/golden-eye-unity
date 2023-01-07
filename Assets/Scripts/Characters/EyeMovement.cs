@@ -45,9 +45,9 @@ namespace Assets.Scripts.Characters
 
         private void Awake()
         {
-            Debug.Assert(this.head != null);
-            Debug.Assert(this.leftEye != null);
-            Debug.Assert(this.rightEye != null);
+            Debug.Assert(this.head != null, "Head is not set.");
+            Debug.Assert(this.leftEye != null, "Left eye is not set.");
+            Debug.Assert(this.rightEye != null, "Right eye is not set.");
 
             this.StopCoroutine(this.PeriodicRefocus());
         }

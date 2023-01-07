@@ -67,17 +67,17 @@ namespace Assets.Scripts.Ai
 
         private void Awake()
         {
-            Debug.Assert(this.thisCharacter != null);
-            Debug.Assert(this.eyeMovement != null);
-            Debug.Assert(this.gunHandler != null);
-            Debug.Assert(this.navMeshAgent != null);
+            Debug.Assert(this.thisCharacter != null, "No character assigned to AI.");
+            Debug.Assert(this.eyeMovement != null, "No eye movement assigned to AI.");
+            Debug.Assert(this.gunHandler != null, "No gun handler assigned to AI.");
+            Debug.Assert(this.navMeshAgent != null, "No nav mesh agent assigned to AI.");
 
             this.navMeshAgent.angularSpeed = this.angularSpeed;
 
             this.characterManager = FindObjectOfType<CharacterManager>();
             Debug.Assert(this.characterManager != null);
 
-            this.perception = new PerceptionImpl(thisCharacter, characterManager, () => this.fieldOfView);
+            this.perception = new PerceptionImpl(this.thisCharacter, this.characterManager, () => this.fieldOfView);
             this.memory = new MemoryImpl();
             this.characterAccess = new CharacterAccess(this);
 
@@ -88,11 +88,11 @@ namespace Assets.Scripts.Ai
                 peacefulBehaviour = new PatrolEndToEnd(this.patrolPath.PatrolPoints.Select(p => p.Position).ToArray());
             }
 
-            var lookAroundBehaviour = new CycleThrough(
+            CycleThrough lookAroundBehaviour = new(
                 new DoWithTimeout(new LookAhead(), 3),
                 new DoWithTimeout(new LookAtClosestVisibleCharacter(), 5));
 
-            var engageBehaviour = new DoWithTimeout(
+            DoWithTimeout engageBehaviour = new(
                 new DoSimultaneouslyUntilAllAreDone(
                     new StandStill(),
                     new FaceClosestVisibleTarget(),
@@ -128,13 +128,11 @@ namespace Assets.Scripts.Ai
             var targetLookDirection = targetPoint - this.thisCharacter.Head.Position;
             var updatedLookDirection = TransformHelper.RotateTowardsAtSpeed(this.thisCharacter.Head.LookDirection, targetLookDirection, this.angularSpeed);
 
-            // Tilt the characters head.            
+            // Tilt the characters head.
             updatedLookDirection.Normalize();
-            var headTilt = -(Mathf.Asin(updatedLookDirection.y) * Mathf.Rad2Deg);
-
-            Debug.Log(headTilt);
+            float headTilt = -(Mathf.Asin(updatedLookDirection.y) * Mathf.Rad2Deg);
             this.thisCharacter.TiltHead(headTilt);
-            
+
             // Turn the whole NPC around Y. Don't change elevation.
             updatedLookDirection.y = 0;
             this.transform.LookAt(this.transform.position + updatedLookDirection);
@@ -164,13 +162,13 @@ namespace Assets.Scripts.Ai
             public void WalkTo(Vector3 destination)
             {
                 this.ai.navMeshAgent.speed = this.ai.walkingSpeed;
-                this.ai.navMeshAgent.SetDestination(destination);
+                _ = this.ai.navMeshAgent.SetDestination(destination);
             }
 
             public void RunTo(Vector3 destination)
             {
                 this.ai.navMeshAgent.speed = this.ai.runnngSpeed;
-                this.ai.navMeshAgent.SetDestination(destination);
+                _ = this.ai.navMeshAgent.SetDestination(destination);
             }
 
             public void TurnTowardsPoint(Vector3 targetPoint)

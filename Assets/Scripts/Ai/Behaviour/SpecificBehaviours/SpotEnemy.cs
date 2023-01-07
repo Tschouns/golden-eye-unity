@@ -22,7 +22,7 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
 
             this.getTimeToSpot = getTimeToSpot;
 
-            Description = $"Spot enemies.";
+            this.Description = $"Spot enemies.";
         }
 
         public string Description { get; }
@@ -31,19 +31,19 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
 
         public void Reset()
         {
-            IsDone = false;
-            characters.Clear();
+            this.IsDone = false;
+            this.characters.Clear();
         }
 
         public void Update(ICharacterAccess characterAccess)
         {
-            TrackCharactersInView(characterAccess.Perception);
+            this.TrackCharactersInView(characterAccess.Perception);
 
-            var enemies = characters
+            var enemies = this.characters
                 .Where(c => c.Key.Faction != characterAccess.Character.Faction)
                 .ToList();
 
-            var timeToSpot = getTimeToSpot();
+            float timeToSpot = this.getTimeToSpot();
             var spottedEnemies = enemies
                 .Where(c => c.Value.TimeInView > timeToSpot)
                 .Select(c => c.Key)
@@ -51,9 +51,7 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
 
             if (spottedEnemies.Any())
             {
-                Debug.Log("Enemy spotted!");
-
-                IsDone = true;
+                this.IsDone = true;
 
                 foreach (var enemy in spottedEnemies)
                 {
@@ -70,7 +68,7 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
             // Track characters in view.
             foreach (var character in perception.CharactersInView)
             {
-                characters.TryAdd(
+                _ = this.characters.TryAdd(
                     character,
                     new CharacterData
                     {
@@ -78,15 +76,15 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
                     });
             }
 
-            foreach (var character in characters.Keys)
+            foreach (var character in this.characters.Keys)
             {
                 if (perception.CharactersInView.Contains(character))
                 {
-                    characters[character].TimeInView += Time.deltaTime;
+                    this.characters[character].TimeInView += Time.deltaTime;
                 }
                 else
                 {
-                    characters[character].TimeInView = Mathf.Max(0, characters[character].TimeInView - Time.deltaTime);
+                    this.characters[character].TimeInView = Mathf.Max(0, this.characters[character].TimeInView - Time.deltaTime);
                 }
             }
         }
