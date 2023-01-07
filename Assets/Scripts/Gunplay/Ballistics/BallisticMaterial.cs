@@ -55,33 +55,15 @@ namespace Assets.Scripts.Gunplay.Ballistics
 
         public void Verify()
         {
-            Debug.Assert(
-                this.penetrateAtVelocity > 0,
-                "Penetration velocity must be greater than 0"
-            );
-            Debug.Assert(
-                this.pierceAtVelocity > this.penetrateAtVelocity,
-                "Pierce velocity must be greater than penetration velocity"
-            );
-            Debug.Assert(
-                this.bouncyness >= 0 && this.bouncyness <= 1,
-                "Bouncyness must be between 0 and 1"
-            );
+            Debug.Assert(this.penetrateAtVelocity > 0, "Penetration velocity must be greater than 0");
+            Debug.Assert(this.pierceAtVelocity > this.penetrateAtVelocity, "Pierce velocity must be greater than penetration velocity");
+            Debug.Assert(this.bouncyness >= 0 && this.bouncyness <= 1, "Bouncyness must be between 0 and 1");
             this.penetratedSoundEmitter.Verify();
             this.piercedSoundEmitter.Verify();
             this.deflectedSoundEmitter.Verify();
-            Debug.Assert(
-                this.penetratedParticleEffectPrefab is not null,
-                "The Prefab for the 'Penetrated Particle Effect' must not be null!"
-            );
-            Debug.Assert(
-                this.piercedParticleEffectPrefab is not null,
-                "The Prefab for the 'Pierced Particle Effect' must not be null!"
-            );
-            Debug.Assert(
-                this.deflectedParticleEffectPrefab is not null,
-                "The Prefab for the 'Deflected Particle Effect' must not be null!"
-            );
+            Debug.Assert(this.penetratedParticleEffectPrefab != null, "The Prefab for the 'Penetrated Particle Effect' must not be null!");
+            Debug.Assert(this.piercedParticleEffectPrefab != null, "The Prefab for the 'Pierced Particle Effect' must not be null!");
+            Debug.Assert(this.deflectedParticleEffectPrefab != null, "The Prefab for the 'Deflected Particle Effect' must not be null!");
         }
     }
 }

@@ -1,15 +1,17 @@
 {
-    "name": {{{ JSON.stringify(PRODUCT_NAME) }}},
-    "short_name": {{{ JSON.stringify(PRODUCT_NAME) }}},
-    "start_url": "index.html",
-    "display": "fullscreen",
-    "background_color": "{{{ BACKGROUND_COLOR }}}",
-    "theme_color": "{{{  SPLASH_SCREEN_STYLE.toLowerCase() === 'light' ? '#fff' : '#000' }}}",
-    "description": {{{ JSON.stringify(PRODUCT_DESCRIPTION) }}},
-    "icons": [{
-      "src": "TemplateData/icons/unity-logo-{{{ SPLASH_SCREEN_STYLE.toLowerCase() }}}.png",
+  "name": "Golden Eye Remake",
+  "short_name": "GoldenEye",
+  "start_url": "index.html",
+  "display": "fullscreen",
+  "background_color": "#231F20",
+  "theme_color": "#231F20",
+  "description": "A remake of the classic GoldenEye 007 game for the Nintendo 64 by the HAL3001 team.",
+  "icons": [
+    {
+      "src": "/TemplateData/N64-Logo.png",
       "sizes": "144x144",
       "type": "image/png",
       "purpose": "any maskable"
-    }]
-  }
+    }
+  ]
+}

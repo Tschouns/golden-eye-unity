@@ -23,15 +23,9 @@ namespace Assets.Scripts.Sound
 
         public override void Verify()
         {
-            Debug.Assert(clips is not null and not { Length: 0 }, "No clips with volume provided!");
-            Debug.Assert(
-                System.Array.TrueForAll(clips, a => a.Clip is not null),
-                "No clip provided!"
-            );
-            Debug.Assert(
-                System.Array.TrueForAll(clips, a => a.Volume >= 0f && a.Volume <= 1f),
-                "Clip must have Volume between 0 and 1!"
-            );
+            Debug.Assert(clips != null && clips.Length > 0, "No clips with volume provided!");
+            Debug.Assert(System.Array.TrueForAll(clips, a => a.Clip != null), "No clip provided!");
+            Debug.Assert(System.Array.TrueForAll(clips, a => a.Volume >= 0f && a.Volume <= 1f),"Clip must have Volume between 0 and 1!");
         }
     }
 }

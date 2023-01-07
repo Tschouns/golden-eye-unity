@@ -1,5 +1,4 @@
-﻿
-namespace Assets.Scripts.Controls
+﻿namespace Assets.Scripts.Controls
 {
     /// <summary>
     /// Provides boolean values for each action, indicating whether the action is being performed in the current frame.
@@ -15,5 +14,6 @@ namespace Assets.Scripts.Controls
         bool Trigger { get; }
         bool Reload { get; }
         bool CycleWeapon { get; }
+        bool TogglePause { get; }
     }
 }

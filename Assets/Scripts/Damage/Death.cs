@@ -18,18 +18,16 @@ namespace Assets.Scripts.Damage
 
         private void Awake()
         {
-            Debug.Assert(health != null);
-            Debug.Assert(this.myRigidbody != null);
+            Debug.Assert(this.health != null, "Health is not set.");
+            Debug.Assert(this.myRigidbody != null, "Rigidbody is not set.");
 
             this.componentsToNotify = this.GetComponentsInChildren<INotifyOnDied>();
 
-            health.Died += this.OnDied;
+            this.health.Died += this.OnDied;
         }
 
         private void OnDied()
         {
-            Debug.Log("Has died!");
-
             // Activate rigidbody physics.
             this.myRigidbody.isKinematic = false;
             this.myRigidbody.useGravity = true;

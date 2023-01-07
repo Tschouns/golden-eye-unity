@@ -34,7 +34,7 @@ namespace Assets.Scripts.Gunplay.Effects
 
         private void Awake()
         {
-            Debug.Assert(this.health != null);
+            Debug.Assert(this.health != null, "Health is not set.");
         }
     }
 }

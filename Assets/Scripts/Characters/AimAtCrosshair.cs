@@ -25,8 +25,8 @@ namespace Assets.Scripts.Characters
 
         private void Awake()
         {
-            Debug.Assert(this.eyePoint != null);
-            Debug.Assert(this.gunHand != null);
+            Debug.Assert(this.eyePoint != null, "Eye point is not set.");
+            Debug.Assert(this.gunHand != null, "Gun hand is not set.");
         }
 
         private void Update()

@@ -33,9 +33,9 @@ namespace Assets.Scripts.Player
 
         private void Awake()
         {
-            Debug.Assert(this.gunHandler != null);
-            Debug.Assert(this.gunInventory != null);
-            Debug.Assert(this.bulletInventory != null);
+            Debug.Assert(this.gunHandler != null, "Gun handler is not set.");
+            Debug.Assert(this.gunInventory != null, "Gun inventory is not set.");
+            Debug.Assert(this.bulletInventory != null, "Bullet inventory is not set.");
         }
 
         private void Start()

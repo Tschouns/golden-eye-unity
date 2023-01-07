@@ -1,5 +1,5 @@
-using UnityEngine;
 using System;
+using UnityEngine;
 
 namespace Assets.Scripts.Sound
 {
@@ -13,11 +13,11 @@ namespace Assets.Scripts.Sound
         private AudioClip clip;
 
         [SerializeField]
-        [Range(0f, 1f)]
+        [Range(0f, 2f)]
         private float volume = 1f;
 
-        public AudioClip Clip => clip;
+        public AudioClip Clip => this.clip;
 
-        public float Volume => volume;
+        public float Volume => this.volume;
     }
 }

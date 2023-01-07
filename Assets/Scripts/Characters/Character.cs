@@ -39,8 +39,8 @@ namespace Assets.Scripts.Characters
 
         private void Awake()
         {
-            Debug.Assert(this.head != null);
-            Debug.Assert(this.visibleParts != null);
+            Debug.Assert(this.head != null, "Head is not set.");
+            Debug.Assert(this.visibleParts != null, "Visible parts are not set.");
 
             this.VisiblePoints = this.visibleParts
                 .Select(t => t.position)

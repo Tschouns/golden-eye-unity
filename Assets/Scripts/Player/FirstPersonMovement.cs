@@ -38,7 +38,7 @@ namespace Assets.Scripts.Player
         private void Awake()
         {
             this.characterController = this.GetComponent<CharacterController>();
-            Debug.Assert(this.characterController != null);
+            Debug.Assert(this.characterController != null, "Character controller is not set.");
         }
 
         private void Update()

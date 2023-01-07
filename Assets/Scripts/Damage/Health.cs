@@ -26,15 +26,11 @@ namespace Assets.Scripts.Damage
             // Adjust health.
             damage = Math.Abs(damage);
             this.CurrentHealth = Math.Max(0, this.CurrentHealth - damage);
-
-            Debug.Log($"Got hurt ({damage}), remaining health: {this.CurrentHealth}");
-
             // Fire "died" event -- only once.
-            if (!this.hasDied &&
-                this.CurrentHealth <= 0)
+            if (!this.hasDied && this.CurrentHealth <= 0)
             {
                 this.hasDied = true;
-                this.Died?.Invoke();
+                Died?.Invoke();
             }
         }
 

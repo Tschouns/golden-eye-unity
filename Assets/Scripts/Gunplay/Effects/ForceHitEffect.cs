@@ -16,15 +16,14 @@ namespace Assets.Scripts.Gunplay.Effects
             this.myRigidbody.AddForceAtPosition(
                 impact.GetImpulse(),
                 impact.EntryPoint,
-                ForceMode.Impulse);
-
-            Debug.Log($"Applied force: {impact.GetImpulse()}");
+                ForceMode.Impulse
+            );
         }
 
         private void Awake()
         {
             this.myRigidbody = this.GetComponentInParent<Rigidbody>();
-            Debug.Assert(this.myRigidbody != null);
+            Debug.Assert(this.myRigidbody != null, "No rigidbody found in parent.");
         }
     }
 }

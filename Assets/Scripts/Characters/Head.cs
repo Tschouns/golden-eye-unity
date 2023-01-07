@@ -16,7 +16,7 @@ namespace Assets.Scripts.Characters
 
         private void Awake()
         {
-            Debug.Assert(this.eyePosition != null);
+            Debug.Assert(this.eyePosition != null, "Eye position is not set.");
         }
     }
 }

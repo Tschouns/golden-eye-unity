@@ -1,5 +1,4 @@
 using Assets.Scripts.Gunplay.Ballistics;
-using Assets.Scripts.Sound;
 using UnityEngine;
 
 namespace Assets.Scripts.Gunplay.Effects
@@ -14,10 +13,10 @@ namespace Assets.Scripts.Gunplay.Effects
         {
             switch (impact.Type)
             {
-                case (BulletImpactType.Penetrated):
+                case BulletImpactType.Penetrated:
                     impact.HitMaterial.PenetratedSoundEmitter?.Play(impact.EntryPoint);
                     break;
-                case (BulletImpactType.Pierced):
+                case BulletImpactType.Pierced:
                     impact.HitMaterial.PiercedSoundEmitter?.Play(impact.EntryPoint);
                     break;
                 default:

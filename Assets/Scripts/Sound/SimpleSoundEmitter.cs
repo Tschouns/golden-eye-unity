@@ -22,11 +22,8 @@ namespace Assets.Scripts.Sound
 
         public override void Verify()
         {
-            Debug.Assert(this.audio.Clip is not null, "No clip provided!");
-            Debug.Assert(
-                this.audio.Volume >= 0f && this.audio.Volume <= 1f,
-                "Clip must have Volume between 0 and 1!"
-            );
+            Debug.Assert(this.audio.Clip != null, "No clip provided!");
+            Debug.Assert(this.audio.Volume >= 0f && this.audio.Volume <= 1f, "Clip must have Volume between 0 and 1!");
         }
     }
 }
