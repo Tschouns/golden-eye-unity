@@ -16,45 +16,45 @@ namespace Assets.Scripts.Ai.Behaviour.BasicBehaviours
         {
             Debug.Assert(behaviours != null);
 
-            steps = behaviours;
-            Description = $"Sequence through: {string.Join(", ", behaviours.Select(b => $"[{b.Description}]"))}";
+            this.steps = behaviours;
+            this.Description = $"Sequence through: {string.Join(", ", behaviours.Select(b => $"[{b.Description}]"))}";
         }
 
         public string Description { get; }
 
-        public bool IsDone => current >= steps.Count;
+        public bool IsDone => this.current >= this.steps.Count;
 
-        private IBehaviour CurrentStep => steps[current];
+        private IBehaviour CurrentStep => this.steps[this.current];
 
         public void Update(ICharacterAccess characterAccess)
         {
-            if (IsDone)
+            if (this.IsDone)
             {
                 return;
             }
 
-            CurrentStep.Update(characterAccess);
+            this.CurrentStep.Update(characterAccess);
 
-            if (CurrentStep.IsDone)
+            if (this.CurrentStep.IsDone)
             {
-                Debug.Log($"Step done: {CurrentStep.Description}");
-                current++;
+                Debug.Log($"Step done: {this.CurrentStep.Description}");
+                this.current++;
 
-                if (!IsDone)
+                if (!this.IsDone)
                 {
-                    Debug.Log($"Next step: {CurrentStep.Description}");
+                    Debug.Log($"Next step: {this.CurrentStep.Description}");
                 }
             }
         }
 
         public void Reset()
         {
-            foreach (var behaviour in steps)
+            foreach (var behaviour in this.steps)
             {
                 behaviour.Reset();
             }
 
-            current = 0;
+            this.current = 0;
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Assets.Scripts.Gunplay.Effects
     {
         private void OnParticleSystemStopped()
         {
-            Destroy(gameObject);
+            Destroy(this.gameObject);
         }
     }
 }

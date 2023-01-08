@@ -18,8 +18,8 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
             var walkStartToEnd = new WalkAlongPath(patrolPoints);
             var walkEndToStart = new WalkAlongPath(patrolPoints.Reverse().ToArray());
 
-            cycle = new CycleThrough(walkStartToEnd, walkEndToStart);
-            Description = $"Patrol between ({patrolPoints.FirstOrDefault()}) and ({patrolPoints.LastOrDefault()})";
+            this.cycle = new CycleThrough(walkStartToEnd, walkEndToStart);
+            this.Description = $"Patrol between ({patrolPoints.FirstOrDefault()}) and ({patrolPoints.LastOrDefault()})";
         }
 
         public string Description { get; }
@@ -28,12 +28,12 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
 
         public void Update(ICharacterAccess characterAccess)
         {
-            cycle.Update(characterAccess);
+            this.cycle.Update(characterAccess);
         }
 
         public void Reset()
         {
-            cycle.Reset();
+            this.cycle.Reset();
         }
     }
 }

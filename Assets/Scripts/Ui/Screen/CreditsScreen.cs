@@ -12,6 +12,9 @@ namespace Assets.Scripts.Ui.Screen
         [SerializeField]
         private Button backButton;
 
+        /// <summary>
+        /// TODO: doc
+        /// </summary>
         public event Action BackButtonClicked;
 
         private void Awake()

@@ -13,15 +13,15 @@
 
         public void Reset()
         {
-            stopped = false;
+            this.stopped = false;
         }
 
         public void Update(ICharacterAccess characterAccess)
         {
-            if (!stopped)
+            if (!this.stopped)
             {
                 characterAccess.WalkTo(characterAccess.Character.Position);
-                stopped = true;
+                this.stopped = true;
             }
         }
     }

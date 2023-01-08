@@ -41,6 +41,9 @@ namespace Assets.Scripts.Ui.Components
         [SerializeField]
         private Button cycleWeapon;
 
+        /// <summary>
+        /// TODO: doc
+        /// </summary>
         public event Action<bool> KeyChangeRequested;
 
         private void Awake()
@@ -54,7 +57,7 @@ namespace Assets.Scripts.Ui.Components
             Debug.Assert(this.reload != null, "Input field for reload undefined!");
             Debug.Assert(this.cycleWeapon != null, "Input field for cycle weapon undefined!");
 
-            this.keyValues = (int[])System.Enum.GetValues(typeof(KeyCode));
+            this.keyValues = (int[]) System.Enum.GetValues(typeof(KeyCode));
             this.btnText.Add(this.forward, this.forward.GetComponentInChildren<TMP_Text>());
             this.btnText.Add(this.backward, this.backward.GetComponentInChildren<TMP_Text>());
             this.btnText.Add(this.left, this.left.GetComponentInChildren<TMP_Text>());
@@ -94,7 +97,7 @@ namespace Assets.Scripts.Ui.Components
             {
                 for (int i = 0; i < this.keyValues.Length; i++)
                 {
-                    var key = (KeyCode)this.keyValues[i];
+                    var key = (KeyCode) this.keyValues[i];
 
                     if (Input.GetKey(key))
                     {
@@ -131,7 +134,7 @@ namespace Assets.Scripts.Ui.Components
         /// </summary>
         private void CancelListening()
         {
-            KeyChangeRequested?.Invoke(false);
+            this.KeyChangeRequested?.Invoke(false);
             this.isListening = false;
         }
 
@@ -156,7 +159,7 @@ namespace Assets.Scripts.Ui.Components
         private void ListenForInput(Button keyCodeButton)
         {
             this.isListening = true;
-            KeyChangeRequested?.Invoke(true);
+            this.KeyChangeRequested?.Invoke(true);
             this.listeningInputButton = keyCodeButton;
         }
 
@@ -167,7 +170,7 @@ namespace Assets.Scripts.Ui.Components
         /// <returns><see cref="KeyCode"/> which corresponds to the text in the button.</returns>
         private KeyCode GetKeyFromBtn(Button btn)
         {
-            return (KeyCode)Enum.Parse(typeof(KeyCode), this.btnText[btn].text);
+            return (KeyCode) Enum.Parse(typeof(KeyCode), this.btnText[btn].text);
         }
 
         private void SetButtonText(Button button, KeyCode keyCode)

@@ -19,7 +19,7 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
 
             this.patrolPoints = patrolPoints;
 
-            Description = $"Random patrol among {string.Join(", ", patrolPoints.Select(p => $"({p})"))}";
+            this.Description = $"Random patrol among {string.Join(", ", patrolPoints.Select(p => $"({p})"))}";
         }
 
         public string Description { get; }
@@ -29,26 +29,26 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
         public void Update(ICharacterAccess characterAccess)
         {
             // Still persuing target?
-            if (currentTargetPoint != null &&
-                Vector3.Distance(currentTargetPoint.Value, characterAccess.Character.Position) > 2f)
+            if (this.currentTargetPoint != null &&
+                Vector3.Distance(this.currentTargetPoint.Value, characterAccess.Character.Position) > 2f)
             {
                 return;
             }
 
             // Select a new target.
-            currentTargetPoint = SelectNextDestinationPoint();
-            characterAccess.WalkTo(currentTargetPoint.Value);
+            this.currentTargetPoint = this.SelectNextDestinationPoint();
+            characterAccess.WalkTo(this.currentTargetPoint.Value);
         }
 
         public void Reset()
         {
-            currentTargetPoint = null;
+            this.currentTargetPoint = null;
         }
 
         private Vector3 SelectNextDestinationPoint()
         {
-            var newTargetIndex = Random.Range(0, patrolPoints.Length - 1);
-            return patrolPoints[newTargetIndex];
+            var newTargetIndex = Random.Range(0, this.patrolPoints.Length - 1);
+            return this.patrolPoints[newTargetIndex];
         }
     }
 }

@@ -117,7 +117,7 @@ namespace Assets.Scripts.Gunplay.Ballistics
                     BulletMass = bulletMass,
                     Velocity = target.Material.PierceAtVelocity,
                     HitMaterial = target.Material,
-                });                
+                });
 
                 // Simulate the bullet as it exits the target.
                 var remainingVelocity = velocity - target.Material.PierceAtVelocity;

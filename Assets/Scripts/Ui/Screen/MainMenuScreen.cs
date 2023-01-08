@@ -21,12 +21,24 @@ namespace Assets.Scripts.Ui.Screen
         [SerializeField]
         private Button quitButton;
 
+        /// <summary>
+        /// TODO: doc
+        /// </summary>
         public event Action PlayButtonClicked;
 
+        /// <summary>
+        /// TODO: doc
+        /// </summary>
         public event Action SettingsButtonClicked;
 
+        /// <summary>
+        /// TODO: doc
+        /// </summary>
         public event Action CreditsButtonClicked;
 
+        /// <summary>
+        /// TODO: doc
+        /// </summary>
         public event Action QuitButtonClicked;
 
         private void Awake()

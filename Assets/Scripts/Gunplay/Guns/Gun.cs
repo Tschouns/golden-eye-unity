@@ -127,7 +127,7 @@ namespace Assets.Scripts.Gunplay.Guns
                 // Dry-fire.
                 this.properties.DryFireSound.Play(this.transform.position);
                 this.StartCoroutine(this.ResetReadynessAfter(1f / this.properties.FireRate));
-                
+
                 if (!this.properties.IsDoubleAction)
                 {
                     this.isCocked = false;

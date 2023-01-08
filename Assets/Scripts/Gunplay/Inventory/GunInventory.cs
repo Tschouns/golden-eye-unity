@@ -41,7 +41,7 @@ namespace Assets.Scripts.Gunplay.Inventory
             {
                 this.index = (this.index + 1) % this.guns.Count;
 
-                return this.guns[index];
+                return this.guns[this.index];
             }
             else
             {

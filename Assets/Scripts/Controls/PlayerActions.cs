@@ -13,15 +13,15 @@ namespace Assets.Scripts.Controls
             this.keyBindings = keyBindings;
         }
 
-        public bool Forward => Input.GetKey(keyBindings.Forward);
-        public bool Backward => Input.GetKey(keyBindings.Backward);
-        public bool Left => Input.GetKey(keyBindings.Left);
-        public bool Right => Input.GetKey(keyBindings.Right);
-        public bool Run => Input.GetKey(keyBindings.Run);
-        public bool ToggleCrouch => Input.GetKeyDown(keyBindings.ToggleCrouch);
+        public bool Forward => Input.GetKey(this.keyBindings.Forward);
+        public bool Backward => Input.GetKey(this.keyBindings.Backward);
+        public bool Left => Input.GetKey(this.keyBindings.Left);
+        public bool Right => Input.GetKey(this.keyBindings.Right);
+        public bool Run => Input.GetKey(this.keyBindings.Run);
+        public bool ToggleCrouch => Input.GetKeyDown(this.keyBindings.ToggleCrouch);
         public bool Trigger => Input.GetMouseButton(0);
-        public bool Reload => Input.GetKeyDown(keyBindings.Reload);
-        public bool CycleWeapon => Input.GetKeyDown(keyBindings.CycleWeapon);
-        public bool TogglePause => Input.GetKeyDown(keyBindings.TogglePause);
+        public bool Reload => Input.GetKeyDown(this.keyBindings.Reload);
+        public bool CycleWeapon => Input.GetKeyDown(this.keyBindings.CycleWeapon);
+        public bool TogglePause => Input.GetKeyDown(this.keyBindings.TogglePause);
     }
 }

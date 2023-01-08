@@ -26,52 +26,52 @@ namespace Assets.Scripts.Ai.Behaviour.BasicBehaviours
             this.checkBehaviour = checkBehaviour;
             this.interludeBehaviour = interludeBehaviour;
 
-            Description = $"Check-Interrupt-Resume (base: [{baseBehaviour.Description}], check: [{checkBehaviour.Description}], interlude: [{interludeBehaviour.Description}])";
+            this.Description = $"Check-Interrupt-Resume (base: [{baseBehaviour.Description}], check: [{checkBehaviour.Description}], interlude: [{interludeBehaviour.Description}])";
         }
 
         public string Description { get; }
 
-        public bool IsDone => baseBehaviour.IsDone;
+        public bool IsDone => this.baseBehaviour.IsDone;
 
         public void Reset()
         {
-            baseBehaviour.Reset();
-            checkBehaviour.Reset();
-            interludeBehaviour.Reset();
+            this.baseBehaviour.Reset();
+            this.checkBehaviour.Reset();
+            this.interludeBehaviour.Reset();
 
-            isInterlude = false;
+            this.isInterlude = false;
         }
 
         public void Update(ICharacterAccess characterAccess)
         {
-            if (isInterlude)
+            if (this.isInterlude)
             {
-                if (interludeBehaviour.IsDone)
+                if (this.interludeBehaviour.IsDone)
                 {
                     // Resume base task. Restart check task.
-                    checkBehaviour.Reset();
-                    interludeBehaviour.Reset();
-                    isInterlude = false;
+                    this.checkBehaviour.Reset();
+                    this.interludeBehaviour.Reset();
+                    this.isInterlude = false;
 
                     return;
                 }
 
-                interludeBehaviour.Update(characterAccess);
+                this.interludeBehaviour.Update(characterAccess);
             }
             else
             {
-                if (checkBehaviour.IsDone)
+                if (this.checkBehaviour.IsDone)
                 {
                     // Start interlude.
-                    checkBehaviour.Reset();
-                    interludeBehaviour.Reset();
-                    isInterlude = true;
+                    this.checkBehaviour.Reset();
+                    this.interludeBehaviour.Reset();
+                    this.isInterlude = true;
 
                     return;
                 }
 
-                baseBehaviour.Update(characterAccess);
-                checkBehaviour.Update(characterAccess);
+                this.baseBehaviour.Update(characterAccess);
+                this.checkBehaviour.Update(characterAccess);
             }
         }
     }
