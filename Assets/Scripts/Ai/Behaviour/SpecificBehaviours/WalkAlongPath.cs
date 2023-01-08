@@ -16,22 +16,22 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
             Debug.Assert(patrolPoints != null);
 
             var steps = patrolPoints.Select(p => new WalkToTarget(p)).ToArray();
-            sequence = new DoInOrder(steps);
-            Description = $"Walk along: {string.Join(", ", patrolPoints.Select(p => $"({p})"))}";
+            this.sequence = new DoInOrder(steps);
+            this.Description = $"Walk along: {string.Join(", ", patrolPoints.Select(p => $"({p})"))}";
         }
 
         public string Description { get; }
 
-        public bool IsDone => sequence.IsDone;
+        public bool IsDone => this.sequence.IsDone;
 
         public void Update(ICharacterAccess characterAccess)
         {
-            sequence.Update(characterAccess);
+            this.sequence.Update(characterAccess);
         }
 
         public void Reset()
         {
-            sequence.Reset();
+            this.sequence.Reset();
         }
     }
 }

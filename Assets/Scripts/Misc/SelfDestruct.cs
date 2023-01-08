@@ -13,7 +13,7 @@ namespace Assets.Scripts.Misc
 
         private void Awake()
         {
-            var delay = Mathf.Max(selfDestructAfterSeconds, 0.000001f);
+            var delay = Mathf.Max(this.selfDestructAfterSeconds, 0.000001f);
             this.StartCoroutine(this.SelfDestructAfterSeconds(delay));
         }
 

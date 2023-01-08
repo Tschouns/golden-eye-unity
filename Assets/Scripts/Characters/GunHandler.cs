@@ -53,7 +53,7 @@ namespace Assets.Scripts.Characters
             }
 
             this.gun = activeGun;
-            
+
             if (activeGun != null)
             {
                 var parent = this.IsEquipped ? this.gunHand : this.gunHolster;

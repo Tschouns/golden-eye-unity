@@ -1,5 +1,4 @@
 ﻿using Assets.Scripts.Damage;
-using System;
 using UnityEngine;
 
 namespace Assets.Scripts.Player

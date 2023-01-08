@@ -6,10 +6,7 @@ namespace Assets.Scripts.Sound
     /// <summary>
     /// Allows to combine multiple sound emitters into one.
     /// </summary>
-    [CreateAssetMenu(
-        fileName = "CompositeSoundEmitter",
-        menuName = "Scriptable Objects/Sound/Composite Emitter"
-    )]
+    [CreateAssetMenu(fileName = "CompositeSoundEmitter", menuName = "Scriptable Objects/Sound/Composite Emitter")]
     public class CompositeSoundEmitter : AbstractSoundEmitter
     {
         [SerializeField]

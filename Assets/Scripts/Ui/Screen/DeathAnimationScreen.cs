@@ -15,6 +15,9 @@ namespace Assets.Scripts.Ui.Screen
         [SerializeField]
         private Image imageComponent;
 
+        /// <summary>
+        /// TODO: doc
+        /// </summary>
         public float AnimationDurationSeconds { get; set; } = 1.0f;
 
         private void OnEnable()
@@ -28,6 +31,7 @@ namespace Assets.Scripts.Ui.Screen
         private IEnumerator AnimationCoroutine()
         {
             float frameTime = this.AnimationDurationSeconds / this.animationSprites.Length;
+
             for (int i = 0; i < this.animationSprites.Length; i++)
             {
                 this.imageComponent.sprite = this.animationSprites[i];

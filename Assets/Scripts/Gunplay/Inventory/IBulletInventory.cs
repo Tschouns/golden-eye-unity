@@ -1,5 +1,4 @@
 ﻿using Assets.Scripts.Gunplay.Guns;
-using UnityEngine;
 
 namespace Assets.Scripts.Gunplay.Inventory
 {

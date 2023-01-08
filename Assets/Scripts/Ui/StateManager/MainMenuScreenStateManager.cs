@@ -24,20 +24,23 @@ namespace Assets.Scripts.Ui.StateManager
 
         private void Awake()
         {
-            Debug.Assert(this.mainMenu != null, "Main Menu is not set!");
             this.mainMenuScreen = this.mainMenu.GetComponent<MainMenuScreen>();
+            this.settingsMenuScreen = this.settingsMenu.GetComponent<SettingsScreen>();
+            this.creditsScreen = this.creditsUi.GetComponent<CreditsScreen>();
+
             Debug.Assert(this.mainMenuScreen != null, "Main Menu Controller is not set!");
+            Debug.Assert(this.settingsMenuScreen != null, "Settings Menu Controller is not set!");
+            Debug.Assert(this.creditsScreen != null, "Credits Ui Controller is not set!");
+
+            Debug.Assert(this.mainMenu != null, "Main Menu is not set!");
+            Debug.Assert(this.settingsMenu != null, "Settings Menu is not set!");
+            Debug.Assert(this.creditsUi != null, "Credits Ui is not set!");
+
             this.mainMenuScreen.PlayButtonClicked += this.StartGame;
             this.mainMenuScreen.SettingsButtonClicked += this.ShowSettingsMenu;
             this.mainMenuScreen.CreditsButtonClicked += this.ShowCreditsUi;
             this.mainMenuScreen.QuitButtonClicked += GameSceneManager.ExitGame;
-            Debug.Assert(this.settingsMenu != null, "Settings Menu is not set!");
-            this.settingsMenuScreen = this.settingsMenu.GetComponent<SettingsScreen>();
-            Debug.Assert(this.settingsMenuScreen != null,"Settings Menu Controller is not set!");
             this.settingsMenuScreen.Exited += this.ShowMainMenu;
-            Debug.Assert(this.creditsUi != null, "Credits Ui is not set!");
-            this.creditsScreen = this.creditsUi.GetComponent<CreditsScreen>();
-            Debug.Assert(this.creditsScreen != null, "Credits Ui Controller is not set!");
             this.creditsScreen.BackButtonClicked += this.ShowMainMenu;
         }
 

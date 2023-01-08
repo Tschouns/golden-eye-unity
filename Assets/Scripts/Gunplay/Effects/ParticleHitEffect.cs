@@ -10,7 +10,7 @@ namespace Assets.Scripts.Gunplay.Effects
     {
         public void ReactToImpact(BulletImpact impact)
         {
-            SpawnEffects(
+            this.SpawnEffects(
                 impact.HitMaterial.PenetratedParticleEffectPrefab,
                 impact.EntryPoint,
                 impact.EntryPoint - impact.EntryDirectionNormalized
@@ -19,14 +19,14 @@ namespace Assets.Scripts.Gunplay.Effects
             switch (impact.Type)
             {
                 case BulletImpactType.Deflected:
-                    SpawnEffects(
+                    this.SpawnEffects(
                         impact.HitMaterial.DeflectedParticleEffectPrefab,
                         impact.ExitPoint,
                         impact.ExitPoint + impact.ExitDirectionNormalized
                     );
                     break;
                 case BulletImpactType.Pierced:
-                    SpawnEffects(
+                    this.SpawnEffects(
                         impact.HitMaterial.PiercedParticleEffectPrefab,
                         impact.ExitPoint,
                         impact.ExitPoint + impact.ExitDirectionNormalized

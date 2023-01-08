@@ -22,6 +22,7 @@ namespace Assets.Scripts.Ui.Components
         {
             Debug.Assert(this.confirmButton != null, "Confirm button is not set!");
             Debug.Assert(this.cancelButton != null, "Cancel button is not set!");
+
             this.confirmButton.onClick.AddListener(this.RaiseConfirmed);
             this.cancelButton.onClick.AddListener(this.RaiseCanceled);
         }

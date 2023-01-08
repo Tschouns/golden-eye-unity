@@ -13,7 +13,7 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
         {
             this.destination = destination;
 
-            Description = $"Walk to ({destination})";
+            this.Description = $"Walk to ({destination})";
         }
 
         public string Description { get; }
@@ -22,21 +22,21 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
 
         public void Update(ICharacterAccess characterAccess)
         {
-            if (Vector3.Distance(characterAccess.Character.Position, destination) < 0.5f)
+            if (Vector3.Distance(characterAccess.Character.Position, this.destination) < 0.5f)
             {
-                IsDone = true;
+                this.IsDone = true;
                 return;
             }
 
-            if (characterAccess.CurrentDestination != destination)
+            if (characterAccess.CurrentDestination != this.destination)
             {
-                characterAccess.WalkTo(destination);
+                characterAccess.WalkTo(this.destination);
             }
         }
 
         public void Reset()
         {
-            IsDone = false;
+            this.IsDone = false;
         }
     }
 }

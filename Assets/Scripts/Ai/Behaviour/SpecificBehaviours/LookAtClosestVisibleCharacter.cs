@@ -22,7 +22,7 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
             {
                 var closest = characterAccess.Perception.CharactersInView
                     .OrderBy(c => Vector3.Distance(c.Head.Position, characterAccess.Character.Head.Position))
-                    .First(c => c != characterAccess.Character);
+                    .First();
 
                 characterAccess.Eyes.SetEyesFocus(closest.Head.Position);
             }

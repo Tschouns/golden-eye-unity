@@ -16,15 +16,15 @@ namespace Assets.Scripts.Ai.Behaviour.BasicBehaviours
             Debug.Assert(behaviours != null);
 
             this.behaviours = behaviours;
-            Description = $"Do simultaneously until any is done: {string.Join(", ", this.behaviours.Select(b => $"[{b}]"))}";
+            this.Description = $"Do simultaneously until any is done: {string.Join(", ", this.behaviours.Select(b => $"[{b}]"))}";
         }
         public string Description { get; }
 
-        public bool IsDone => behaviours.Any(b => b.IsDone);
+        public bool IsDone => this.behaviours.Any(b => b.IsDone);
 
         public void Reset()
         {
-            foreach (var behaviour in behaviours)
+            foreach (var behaviour in this.behaviours)
             {
                 behaviour.Reset();
             }
@@ -32,7 +32,7 @@ namespace Assets.Scripts.Ai.Behaviour.BasicBehaviours
 
         public void Update(ICharacterAccess characterAccess)
         {
-            foreach (var behaviour in behaviours.Where(b => !b.IsDone))
+            foreach (var behaviour in this.behaviours.Where(b => !b.IsDone))
             {
                 behaviour.Update(characterAccess);
             }

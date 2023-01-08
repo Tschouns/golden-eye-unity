@@ -14,8 +14,8 @@ namespace Assets.Scripts.Ai.Behaviour.BasicBehaviours
         {
             Debug.Assert(behaviours != null);
 
-            sequence = new DoInOrder(behaviours);
-            Description = $"Cycle through: {string.Join(", ", behaviours.Select(b => $"[{b.Description}]"))}";
+            this.sequence = new DoInOrder(behaviours);
+            this.Description = $"Cycle through: {string.Join(", ", behaviours.Select(b => $"[{b.Description}]"))}";
         }
         public bool IsDone => false;
 
@@ -23,17 +23,17 @@ namespace Assets.Scripts.Ai.Behaviour.BasicBehaviours
 
         public void Update(ICharacterAccess characterAccess)
         {
-            if (sequence.IsDone)
+            if (this.sequence.IsDone)
             {
-                sequence.Reset();
+                this.sequence.Reset();
             }
 
-            sequence.Update(characterAccess);
+            this.sequence.Update(characterAccess);
         }
 
         public void Reset()
         {
-            sequence.Reset();
+            this.sequence.Reset();
         }
     }
 }

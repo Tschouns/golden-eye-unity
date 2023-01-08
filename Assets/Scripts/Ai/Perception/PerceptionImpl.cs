@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.Characters;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.Scripts.Ai.Perception
@@ -32,9 +33,11 @@ namespace Assets.Scripts.Ai.Perception
 
         public void Update()
         {
+            var allOtherCharacters = this.characterManager.AllCharacters.Where(c => c != this.character).ToList();
+
             this.CharactersInView = VisionHelper.CheckForVisibleCharacters(
                 this.character.Head,
-                this.characterManager.AllCharacters,
+                allOtherCharacters,
                 this.getFieldOfView());
         }
     }

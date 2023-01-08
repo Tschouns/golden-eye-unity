@@ -1,4 +1,3 @@
-using Assets.Scripts.Misc;
 using UnityEngine;
 
 namespace Assets.Scripts.Sound
@@ -6,10 +5,7 @@ namespace Assets.Scripts.Sound
     /// <summary>
     /// Describes a sound emitter that plays a single sound at a given position.
     /// </summary>
-    [CreateAssetMenu(
-        fileName = "SimpleSoundEmitter",
-        menuName = "Scriptable Objects/Sound/Simple Emitter"
-    )]
+    [CreateAssetMenu(fileName = "SimpleSoundEmitter", menuName = "Scriptable Objects/Sound/Simple Emitter")]
     public class SimpleSoundEmitter : AbstractSoundEmitter
     {
         [SerializeField]

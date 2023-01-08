@@ -28,6 +28,9 @@ namespace Assets.Scripts.Ui.Screen
         [SerializeField]
         private GameObject overlaySavingPrompt;
 
+        /// <summary>
+        /// TODO: doc
+        /// </summary>
         public event Action Exited;
 
         private void Awake()
@@ -35,23 +38,21 @@ namespace Assets.Scripts.Ui.Screen
             // Overlay
             Debug.Assert(this.overlayWaitingForInput != null, "'Settings overlay' is not set!");
             Debug.Assert(this.overlaySavingPrompt != null, "'Confirm overlay' is not set!");
-            this.confirmSavePrompt =
-                this.overlaySavingPrompt.GetComponent<ConfirmCancelUiComponent>();
+
+            this.confirmSavePrompt = this.overlaySavingPrompt.GetComponent<ConfirmCancelUiComponent>();
             Debug.Assert(this.confirmSavePrompt != null, "'Confirm Ui controller' is not set!");
+
             this.confirmSavePrompt.Confirmed += this.OnSavePromptSaveClicked;
             this.confirmSavePrompt.Canceled += this.OnSavePromptExitClicked;
+
             // Controllers
             this.keysUiController = this.GetComponentInChildren<KeyRebindingUiComponent>();
-            Debug.Assert(
-                this.keysUiController != null,
-                "'Key rebinding controller' is not set in children!"
-            );
+            Debug.Assert(this.keysUiController != null, "'Key rebinding controller' is not set in children!");
+
             this.keysUiController.KeyChangeRequested += this.KeyChangeRequested;
             this.settingsUiController = this.GetComponentInChildren<GameplaySettingsUiComponent>();
-            Debug.Assert(
-                this.settingsUiController != null,
-                "'Gameplay settings controller' is not set in children!"
-            );
+            Debug.Assert(this.settingsUiController != null, "'Gameplay settings controller' is not set in children!");
+
             // Buttons
             Debug.Assert(this.saveButton != null, "Save button is not set!");
             Debug.Assert(this.exitButton != null, "Exit button is not set!");
@@ -74,7 +75,8 @@ namespace Assets.Scripts.Ui.Screen
         {
             // Gameplay settings
             this.settingsUiController.SaveSettings();
-            // keyBindings
+
+            // Key Bindings
             var keyBindings = this.keysUiController.GetKeyBindings();
             ControlsProvider.SaveAndReloadPlayerActions(keyBindings);
         }

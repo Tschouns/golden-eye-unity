@@ -11,9 +11,7 @@ namespace Assets.Scripts.Ui.StateManager
     /// </summary>
     public class InGameScreenStateManager : MonoBehaviour
     {
-        private static readonly float DEATH_ANIMATION_DURATION_SECONDS = 3.0f;
-
-        private readonly GameOverScreen gameOverScreen;
+        private static readonly float deathAnimationDurationSeconds = 3.0f;
 
         [SerializeField]
         private GameObject settingsMenu;
@@ -25,30 +23,33 @@ namespace Assets.Scripts.Ui.StateManager
         private GameObject gameOverMenu;
 
         [SerializeField]
-        private GameObject Hud;
+        private GameObject hud;
 
         [SerializeField]
         private Health playerHealth;
 
-        public bool isPaused { get; private set; } = false;
-
-        public float MouseSensitivity { get; set; } = 1.0f;
+        /// <summary>
+        /// Gets or sets a value indicating whether the game is currently paused.
+        /// </summary>
+        public bool IsPaused { get; private set; } = false;
 
         private void Awake()
         {
-            // HUD
-            Debug.Assert(this.Hud != null, "HUD is not set.");
-            // Settings
             Debug.Assert(this.settingsMenu != null, "Settings menu is not set.");
-            var settingsMenuController = this.settingsMenu.GetComponent<SettingsScreen>();
-            settingsMenuController.Exited += this.ResumeGame;
-            // GameOver Animation
             Debug.Assert(this.gameOverAnimation != null, "Game over animation is not set.");
-            var deathAnimationScreen = this.gameOverAnimation.GetComponent<DeathAnimationScreen>();
-            deathAnimationScreen.AnimationDurationSeconds = DEATH_ANIMATION_DURATION_SECONDS;
-            // GameOver Menu
             Debug.Assert(this.gameOverMenu != null, "Game over menu is not set.");
-            // Player Death
+            Debug.Assert(this.hud != null, "HUD is not set.");
+            Debug.Assert(this.playerHealth != null, "PLayer Health is not set.");
+
+            var settingsMenuController = this.settingsMenu.GetComponent<SettingsScreen>();
+            var deathAnimationScreen = this.gameOverAnimation.GetComponent<DeathAnimationScreen>();
+
+            Debug.Assert(settingsMenuController != null);
+            Debug.Assert(deathAnimationScreen != null);
+
+            settingsMenuController.Exited += this.ResumeGame;
+            deathAnimationScreen.AnimationDurationSeconds = deathAnimationDurationSeconds;
+
             this.playerHealth.Died += this.GameOver;
         }
 
@@ -56,7 +57,7 @@ namespace Assets.Scripts.Ui.StateManager
         {
             if (ControlsProvider.Actions.TogglePause)
             {
-                if (this.isPaused)
+                if (this.IsPaused)
                 {
                     this.ResumeGame();
                 }
@@ -69,19 +70,19 @@ namespace Assets.Scripts.Ui.StateManager
 
         private void PauseGame()
         {
-            this.isPaused = true;
+            this.IsPaused = true;
             Time.timeScale = 0;
             this.FocusUi();
-            this.Hud.SetActive(false);
+            this.hud.SetActive(false);
             this.settingsMenu.SetActive(true);
         }
 
         private void ResumeGame()
         {
-            this.isPaused = false;
+            this.IsPaused = false;
             this.FocusGame();
             this.settingsMenu.SetActive(false);
-            this.Hud.SetActive(true);
+            this.hud.SetActive(true);
             Time.timeScale = 1;
         }
 
@@ -95,11 +96,11 @@ namespace Assets.Scripts.Ui.StateManager
 
         private IEnumerator PlayGameOverAnimation()
         {
-            this.Hud.SetActive(false);
+            this.hud.SetActive(false);
             // Activate the game over animation.
             this.gameOverAnimation.SetActive(true);
             // Wait for the animation to finish.
-            yield return new WaitForSeconds(DEATH_ANIMATION_DURATION_SECONDS);
+            yield return new WaitForSeconds(deathAnimationDurationSeconds);
             // After we have waited for the animation to finish, show the Game Over Screen.
             this.gameOverAnimation.SetActive(false);
             this.FocusUi();

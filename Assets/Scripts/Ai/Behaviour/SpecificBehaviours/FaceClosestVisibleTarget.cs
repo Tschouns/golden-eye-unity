@@ -26,7 +26,7 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
             {
                 var closest = visibleTargets
                     .OrderBy(c => Vector3.Distance(c.Head.Position, characterAccess.Character.Head.Position))
-                    .First(c => c != characterAccess.Character);
+                    .First();
 
                 characterAccess.TurnTowardsPoint(closest.Head.Position);
                 characterAccess.Eyes.SetEyesFocus(closest.Head.Position);

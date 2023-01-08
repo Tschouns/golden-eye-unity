@@ -21,10 +21,7 @@ namespace Assets.Scripts.Ui.Components
 
         private void OnEnable()
         {
-            this.masterVolumeSlider.value = PlayerPrefs.GetFloat(
-                "MasterVolume",
-                this.previousMasterVolume
-            );
+            this.masterVolumeSlider.value = PlayerPrefs.GetFloat("MasterVolume", this.previousMasterVolume);
             this.previousMasterVolume = this.masterVolumeSlider.value;
         }
 

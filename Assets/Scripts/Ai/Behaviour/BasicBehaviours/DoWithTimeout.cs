@@ -19,23 +19,23 @@ namespace Assets.Scripts.Ai.Behaviour.BasicBehaviours
             this.timedBehaviour = timedBehaviour;
             this.timeout = timeout;
 
-            Description = $"Do with timeout ({this.timeout}s): [{this.timedBehaviour}]";
+            this.Description = $"Do with timeout ({this.timeout}s): [{this.timedBehaviour}]";
         }
 
         public string Description { get; }
 
-        public bool IsDone => timedBehaviour.IsDone || timeRunning >= timeout;
+        public bool IsDone => this.timedBehaviour.IsDone || this.timeRunning >= this.timeout;
 
         public void Reset()
         {
-            timedBehaviour.Reset();
-            timeRunning = 0;
+            this.timedBehaviour.Reset();
+            this.timeRunning = 0;
         }
 
         public void Update(ICharacterAccess characterAccess)
         {
-            timedBehaviour.Update(characterAccess);
-            timeRunning += Time.deltaTime;
+            this.timedBehaviour.Update(characterAccess);
+            this.timeRunning += Time.deltaTime;
         }
     }
 }
