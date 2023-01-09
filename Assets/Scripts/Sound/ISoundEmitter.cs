@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Assets.Scripts.Sound
 {
     /// <summary>
-    /// Abstracts an <see cref="AudioSource"/> that can simple be played at a given position.
+    /// Abstracts an sound source that can simply be played at a given position.
     /// </summary>
     public interface ISoundEmitter
     {

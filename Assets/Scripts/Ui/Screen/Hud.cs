@@ -1,20 +1,29 @@
 using Assets.Scripts.Characters;
 using Assets.Scripts.Gunplay.Inventory;
+using Assets.Scripts.Missions;
+using System;
+using System.Linq;
+using System.Text;
 using TMPro;
 using UnityEngine;
 
-namespace Assets.Scripts.Ui.Screen
+namespace Assets.Scripts.Ui
 {
     /// <summary>
-    /// Controlls the HUD.
+    /// Updates the HUD.
     /// </summary>
     public class Hud : MonoBehaviour
     {
+        private MissionController missionController;
+
         [SerializeField]
         private TextMeshProUGUI currentGunBulletCountText;
 
         [SerializeField]
         private TextMeshProUGUI inventoryBulletCountText;
+
+        [SerializeField]
+        private TextMeshProUGUI missionObjectivesText;
 
         [SerializeField]
         private GunHandler gunHandler;
@@ -24,13 +33,20 @@ namespace Assets.Scripts.Ui.Screen
 
         private void Awake()
         {
-            Debug.Assert(this.currentGunBulletCountText != null, "Current gun bullet count text is not set.");
-            Debug.Assert(this.inventoryBulletCountText != null, "Inventory bullet count text is not set.");
+            Debug.Assert(this.currentGunBulletCountText != null);
+            Debug.Assert(this.inventoryBulletCountText != null);
+            Debug.Assert(this.missionObjectivesText != null);
+
+            Debug.Assert(this.gunHandler != null);
+            Debug.Assert(this.bulletInventory != null);
+
+            this.missionController = FindObjectOfType<MissionController>();
         }
 
         private void Update()
         {
             this.UpdateBulletCountDisplay();
+            this.UpdateMissionObjectivesDisplay();
         }
 
         private void UpdateBulletCountDisplay()
@@ -45,8 +61,41 @@ namespace Assets.Scripts.Ui.Screen
 
             this.currentGunBulletCountText.text = this.gunHandler.ActiveGun.CurrentNumberOfBullets.ToString();
 
-            int inventoryBulletCount = this.bulletInventory.GetNumberOfBulletsForType(this.gunHandler.ActiveGun.Properties.Cartridge);
+            var inventoryBulletCount = this.bulletInventory.GetNumberOfBulletsForType(this.gunHandler.ActiveGun.Properties.Cartridge);
             this.inventoryBulletCountText.text = inventoryBulletCount.ToString();
+        }
+
+        private void UpdateMissionObjectivesDisplay()
+        {
+            if (this.missionController == null)
+            {
+                this.missionObjectivesText.text = "No mission.";
+                return;
+            }
+
+            var text = new StringBuilder($"Mission Objectives ({this.GetStatusText(this.missionController.Status)}):\n");
+
+            foreach (var objective in this.missionController.Objectives)
+            {
+                text.AppendLine($"- {objective.Description}: {this.GetStatusText(objective.Status)}");
+            }
+
+            this.missionObjectivesText.text = text.ToString();
+        }
+
+        private string GetStatusText(MissionStatus status)
+        {
+            switch (status)
+            {
+                case MissionStatus.InProgress:
+                    return "in progress";    
+                case MissionStatus.Completed:
+                    return "completed";
+                case MissionStatus.Failed:
+                    return "failed";
+                default:
+                    throw new ArgumentException($"The specified mission status {status} is not supported.");
+            }
         }
     }
 }

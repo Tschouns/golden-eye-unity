@@ -19,9 +19,13 @@ namespace Assets.Scripts.Characters
         [SerializeField]
         private string faction = "soviet";
 
+        [SerializeField]
+        private string characterType = "combatant";
+
         public IHead Head => this.head;
         public IEnumerable<Vector3> VisiblePoints { get; private set; }
         public string Faction => this.faction;
+        public string CharacterType => this.characterType;
         public Vector3 Position => this.transform.position;
         public bool IsAlive { get; private set; } = true;
 
