@@ -25,7 +25,7 @@ namespace Assets.Scripts.Ai.Behaviour
                 new CycleThrough(
                     new DoWithTimeout(baseTask, 12f),
                     new DoWithTimeout(new StandStill(), 3f)),
-                new DoNothing()); // TODO: replace by "face ahead"
+                new FaceForeward());
 
             // "Alert" mode.
             var engage = new DoSimultaneouslyUntilAllAreDone(

@@ -8,7 +8,7 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
     /// </summary>
     public class FaceClosestVisibleTarget : IBehaviour
     {
-        public string Description { get; } = "Look at closest visible target.";
+        public string Description { get; } = "Face closest visible target.";
 
         public bool IsDone => false;
 
