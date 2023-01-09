@@ -1,23 +1,20 @@
 ﻿using Assets.Scripts.Ai.Behaviour;
-using Assets.Scripts.Ai.Behaviour.BasicBehaviours;
-using Assets.Scripts.Ai.Behaviour.SpecificBehaviours;
 using Assets.Scripts.Ai.Memory;
 using Assets.Scripts.Ai.Patrols;
 using Assets.Scripts.Ai.Perception;
 using Assets.Scripts.Characters;
 using Assets.Scripts.Damage;
 using Assets.Scripts.Misc;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace Assets.Scripts.Ai
 {
     /// <summary>
-    /// Implements the A.I. of a military NPC.
+    /// Implements the A.I. of an NPC.
     /// </summary>
     [RequireComponent(typeof(NavMeshAgent))]
-    public class MilitaryAi : MonoBehaviour, INotifyOnDied
+    public class CharacterAi : MonoBehaviour, INotifyOnDied
     {
         [SerializeField]
         private Character thisCharacter;
@@ -74,6 +71,7 @@ namespace Assets.Scripts.Ai
 
             this.navMeshAgent.angularSpeed = this.angularSpeed;
 
+            // Setup the "character access" -- properties of the character the behaviour can access.
             this.characterManager = FindObjectOfType<CharacterManager>();
             Debug.Assert(this.characterManager != null);
 
@@ -81,32 +79,8 @@ namespace Assets.Scripts.Ai
             this.memory = new MemoryImpl();
             this.characterAccess = new CharacterAccess(this);
 
-            IBehaviour peacefulBehaviour = new DoNothing();
-
-            if (this.patrolPath != null)
-            {
-                peacefulBehaviour = new PatrolEndToEnd(this.patrolPath.PatrolPoints.Select(p => p.Position).ToArray());
-            }
-
-            CycleThrough lookAroundBehaviour = new(
-                new DoWithTimeout(new LookAhead(), 3),
-                new DoWithTimeout(new LookAtClosestVisibleCharacter(), 5));
-
-            DoWithTimeout engageBehaviour = new(
-                new DoSimultaneouslyUntilAllAreDone(
-                    new StandStill(),
-                    new FaceClosestVisibleTarget(),
-                    new CycleThrough(
-                        new DoWithTimeout(new Shoot(), 1.5f),
-                        new DoWithTimeout(new DoNothing(), 1f))),
-                5f);
-
-            this.behaviour = new CheckInterruptResume(
-                    peacefulBehaviour,
-                    new DoSimultaneouslyUntilEitherIsDone(
-                        new SpotEnemy(() => this.timeToSpot),
-                        lookAroundBehaviour),
-                    engageBehaviour);
+            // Setup behaviour.
+            this.behaviour = BehaviourFactory.CreateLegacyMilitaryAiBehaviour(this.patrolPath, this.timeToSpot);
         }
 
         private void Update()
@@ -143,9 +117,9 @@ namespace Assets.Scripts.Ai
         /// </summary>
         private class CharacterAccess : ICharacterAccess
         {
-            private readonly MilitaryAi ai;
+            private readonly CharacterAi ai;
 
-            public CharacterAccess(MilitaryAi ai)
+            public CharacterAccess(CharacterAi ai)
             {
                 Debug.Assert(ai != null);
 
