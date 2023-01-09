@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Sound;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts.Gunplay.Ballistics
@@ -40,18 +41,18 @@ namespace Assets.Scripts.Gunplay.Ballistics
         ISoundEmitter DeflectedSoundEmitter { get; }
 
         /// <summary>
-        /// Gets the prefab for the "penetrated" particle effect.
+        /// Gets the prefabs for the "penetrated" particle effects.
         /// </summary>
-        GameObject[] PenetratedParticleEffectPrefab { get; }
+        IEnumerable<GameObject> PenetratedParticleEffectPrefabs { get; }
 
         /// <summary>
-        /// Gets the prefab for the "pierced" particle effect.
+        /// Gets the prefabs for the "pierced" particle effects.
         /// </summary>
-        GameObject[] PiercedParticleEffectPrefab { get; }
+        IEnumerable<GameObject> PiercedParticleEffectPrefabs { get; }
 
         /// <summary>
-        /// Gets the prefab for the "deflected" particle effect.
+        /// Gets the prefabs for the "deflected" particle effects.
         /// </summary>
-        GameObject[] DeflectedParticleEffectPrefab { get; }
+        IEnumerable<GameObject> DeflectedParticleEffectPrefabs { get; }
     }
 }

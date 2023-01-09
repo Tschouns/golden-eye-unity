@@ -1,4 +1,6 @@
 using Assets.Scripts.Gunplay.Ballistics;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.Scripts.Gunplay.Effects
@@ -10,42 +12,47 @@ namespace Assets.Scripts.Gunplay.Effects
     {
         public void ReactToImpact(BulletImpact impact)
         {
-            this.SpawnEffects(
-                impact.HitMaterial.PenetratedParticleEffectPrefab,
+            SpawnEffects(
+                impact.HitMaterial.PenetratedParticleEffectPrefabs,
                 impact.EntryPoint,
-                impact.EntryPoint - impact.EntryDirectionNormalized
-            );
+                impact.EntryPoint - impact.EntryDirectionNormalized);
 
             switch (impact.Type)
             {
                 case BulletImpactType.Deflected:
-                    this.SpawnEffects(
-                        impact.HitMaterial.DeflectedParticleEffectPrefab,
+                    SpawnEffects(
+                        impact.HitMaterial.DeflectedParticleEffectPrefabs,
                         impact.ExitPoint,
-                        impact.ExitPoint + impact.ExitDirectionNormalized
-                    );
+                        impact.ExitPoint + impact.ExitDirectionNormalized);
                     break;
                 case BulletImpactType.Pierced:
-                    this.SpawnEffects(
-                        impact.HitMaterial.PiercedParticleEffectPrefab,
+                    SpawnEffects(
+                        impact.HitMaterial.PiercedParticleEffectPrefabs,
                         impact.ExitPoint,
-                        impact.ExitPoint + impact.ExitDirectionNormalized
-                    );
+                        impact.ExitPoint + impact.ExitDirectionNormalized);
                     break;
             }
         }
 
-        private void SpawnEffects(GameObject[] prefabs, Vector3 position, Vector3 lookAtPoint)
+        private void SpawnEffects(IEnumerable<GameObject> prefabsNullSafe, Vector3 position, Vector3 lookAtPoint)
         {
-            foreach (var prefab in prefabs)
+            if (prefabsNullSafe == null)
             {
-                var effect = Instantiate(
-                    prefab,
-                    position,
-                    Quaternion.identity,
-                    this.gameObject.transform
-                );
-                effect.transform.LookAt(lookAtPoint, Vector3.up);
+                return;
+            }
+
+            foreach (var prefab in prefabsNullSafe)
+            {
+                if (prefab != null)
+                {
+                    var effect = Instantiate(
+                        prefab,
+                        position,
+                        Quaternion.identity,
+                        this.gameObject.transform);
+
+                    effect.transform.LookAt(lookAtPoint, Vector3.up);
+                }
             }
         }
     }

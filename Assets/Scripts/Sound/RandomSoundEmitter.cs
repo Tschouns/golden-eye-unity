@@ -13,15 +13,20 @@ namespace Assets.Scripts.Sound
 
         public override void Play(Vector3 soundOrigin)
         {
-            var clip = this.clips[Random.Range(0, this.clips.Length)];
+            var i = Random.Range(0, this.clips.Length);
+            var clip = this.clips[i];
+
             AudioSource.PlayClipAtPoint(clip.Clip, soundOrigin, clip.Volume);
         }
 
         public override void Verify()
         {
-            Debug.Assert(this.clips != null && this.clips.Length > 0, "No clips with volume provided!");
-            Debug.Assert(System.Array.TrueForAll(this.clips, a => a.Clip != null), "No clip provided!");
-            Debug.Assert(System.Array.TrueForAll(this.clips, a => a.Volume >= 0f && a.Volume <= 1f), "Clip must have Volume between 0 and 1!");
+            Debug.Assert(clips != null && clips.Length > 0, "No clips with volume provided.");
+
+            foreach (var clip in this.clips)
+            {
+                clip.Verify();
+            }
         }
     }
 }

@@ -24,6 +24,11 @@ namespace Assets.Scripts.Characters
         string Faction { get; }
 
         /// <summary>
+        /// Gets the character type which can be specified freely. E.g. a "combatant" or "civilian".
+        /// </summary>
+        string CharacterType { get; }
+
+        /// <summary>
         /// Gets the character's position.
         /// </summary>
         Vector3 Position { get; }
