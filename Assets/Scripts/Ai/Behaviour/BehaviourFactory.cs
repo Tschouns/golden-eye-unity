@@ -11,6 +11,46 @@ namespace Assets.Scripts.Ai.Behaviour
     /// </summary>
     public static class BehaviourFactory
     {
+        public static IBehaviour CreateSoldierBehaviour(IPatrolPath patrolPathOrNull, float timeToSpot)
+        {
+            IBehaviour baseTask = new DoNothing();
+
+            if (patrolPathOrNull != null)
+            {
+                baseTask = new PatrolEndToEnd(patrolPathOrNull.PatrolPoints.Select(p => p.Position).ToArray());
+            }
+
+            // "Peaceful" mode.
+            var peacefulBehaviour = new DoSimultaneouslyUntilAllAreDone(
+                new CycleThrough(
+                    new DoWithTimeout(baseTask, 12f),
+                    new DoWithTimeout(new StandStill(), 3f)),
+                new DoNothing()); // TODO: replace by "face ahead"
+
+            // "Alert" mode.
+            var engage = new DoSimultaneouslyUntilAllAreDone(
+                    new StandStill(),
+                    new FaceClosestVisibleTarget(),
+                    new CycleThrough(
+                        new DoWithTimeout(new Shoot(), 1.5f),
+                        new DoWithTimeout(new DoNothing(), 1f)));
+
+            var alertBehaviour = new DoWhile(
+                engage,
+                c => c.Memory.ActiveTargets.Any(c => c.IsAlive),
+                "any active targets");
+
+            // Complete orchestrated behaviour.
+            var behaviour = new CheckInterruptResume(
+                    peacefulBehaviour,
+                    new DoSimultaneouslyUntilEitherIsDone(
+                        new SpotEnemy(() => timeToSpot),
+                        CreateLookAroundRelaxed()),
+                    alertBehaviour);
+
+            return behaviour;
+        }
+
         /// <summary>
         /// Creates the original stupid "military AI" prototype behaviour.
         /// </summary>
@@ -33,12 +73,8 @@ namespace Assets.Scripts.Ai.Behaviour
                 peacefulBehaviour = new PatrolEndToEnd(patrolPathOrNull.PatrolPoints.Select(p => p.Position).ToArray());
             }
 
-            CycleThrough lookAroundBehaviour = new(
-                new DoWithTimeout(new LookAhead(), 3),
-                new DoWithTimeout(new LookAtClosestVisibleCharacter(), 5));
-
             // Engage behaviour.
-            DoWithTimeout engageBehaviour = new(
+            var engageBehaviour = new DoWithTimeout(
                 new DoSimultaneouslyUntilAllAreDone(
                     new StandStill(),
                     new FaceClosestVisibleTarget(),
@@ -52,10 +88,19 @@ namespace Assets.Scripts.Ai.Behaviour
                     peacefulBehaviour,
                     new DoSimultaneouslyUntilEitherIsDone(
                         new SpotEnemy(() => timeToSpot),
-                        lookAroundBehaviour),
+                        CreateLookAroundRelaxed()),
                     engageBehaviour);
 
             return behaviour;
+        }
+
+        private static IBehaviour CreateLookAroundRelaxed()
+        {
+            var lookAroundRelaxed = new CycleThrough(
+                new DoWithTimeout(new LookAhead(), 3),
+                new DoWithTimeout(new LookAtClosestVisibleCharacter(), 5));
+
+            return lookAroundRelaxed;
         }
     }
 }

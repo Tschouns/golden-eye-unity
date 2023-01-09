@@ -80,7 +80,7 @@ namespace Assets.Scripts.Ai
             this.characterAccess = new CharacterAccess(this);
 
             // Setup behaviour.
-            this.behaviour = BehaviourFactory.CreateLegacyMilitaryAiBehaviour(this.patrolPath, this.timeToSpot);
+            this.behaviour = BehaviourFactory.CreateSoldierBehaviour(this.patrolPath, this.timeToSpot);
         }
 
         private void Update()
