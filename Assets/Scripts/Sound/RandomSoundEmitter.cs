@@ -21,7 +21,7 @@ namespace Assets.Scripts.Sound
 
         public override void Verify()
         {
-            Debug.Assert(clips != null && clips.Length > 0, "No clips with volume provided.");
+            Debug.Assert(this.clips != null && this.clips.Length > 0, "No clips with volume provided.");
 
             foreach (var clip in this.clips)
             {
