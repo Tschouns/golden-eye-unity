@@ -1,6 +1,6 @@
 ﻿using Assets.Scripts.Ai.Behaviour;
 using Assets.Scripts.Ai.Behaviour.SpecificBehaviours;
-using Assets.Scripts.Ai.Patrols;
+using Assets.Scripts.Ai.Navigation;
 using System.Linq;
 using UnityEngine;
 

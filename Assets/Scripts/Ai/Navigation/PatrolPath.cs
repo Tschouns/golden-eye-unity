@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Assets.Scripts.Ai.Patrols
+namespace Assets.Scripts.Ai.Navigation
 {
     /// <summary>
     /// Implements a patrol path. Collects control points from its child objects.

@@ -1,7 +1,7 @@
 ﻿using Assets.Scripts.Ai.Behaviour;
 using Assets.Scripts.Ai.Configuration;
 using Assets.Scripts.Ai.Memory;
-using Assets.Scripts.Ai.Patrols;
+using Assets.Scripts.Ai.Navigation;
 using Assets.Scripts.Ai.Perception;
 using Assets.Scripts.Characters;
 using Assets.Scripts.Damage;
