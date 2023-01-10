@@ -57,6 +57,11 @@ namespace Assets.Scripts.Ai.Behaviour
         void RunTo(Vector3 destination);
 
         /// <summary>
+        /// Makes the character stop moving towards the destination.
+        /// </summary>
+        void Stop();
+
+        /// <summary>
         /// Makes the character turn towards the specified point.
         /// </summary>
         /// <param name="targetPoint">

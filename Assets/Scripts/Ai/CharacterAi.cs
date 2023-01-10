@@ -152,13 +152,23 @@ namespace Assets.Scripts.Ai
             public void WalkTo(Vector3 destination)
             {
                 this.ai.navMeshAgent.speed = this.ai.walkingSpeed;
+                this.ai.navMeshAgent.isStopped = false;
+
                 _ = this.ai.navMeshAgent.SetDestination(destination);
             }
 
             public void RunTo(Vector3 destination)
             {
                 this.ai.navMeshAgent.speed = this.ai.runnngSpeed;
+                this.ai.navMeshAgent.isStopped = false;
+
                 _ = this.ai.navMeshAgent.SetDestination(destination);
+            }
+
+            public void Stop()
+            {
+                this.ai.navMeshAgent.speed = this.ai.walkingSpeed;
+                this.ai.navMeshAgent.isStopped = true;
             }
 
             public void TurnTowardsPoint(Vector3 targetPoint)
