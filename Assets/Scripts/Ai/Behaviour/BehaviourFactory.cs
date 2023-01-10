@@ -2,6 +2,7 @@
 using Assets.Scripts.Ai.Behaviour.SpecificBehaviours;
 using Assets.Scripts.Ai.Patrols;
 using System.Linq;
+using UnityEngine;
 
 namespace Assets.Scripts.Ai.Behaviour
 {
@@ -10,6 +11,39 @@ namespace Assets.Scripts.Ai.Behaviour
     /// </summary>
     public static class BehaviourFactory
     {
+        /// <summary>
+        /// Creates the basic orchestrated NPC behaviour, where characters can be in "peaceful" or "alert" mode.
+        /// </summary>
+        /// <param name="peacefulBehaviour">
+        /// The specific behaviour for when the character is "peaceful"
+        /// </param>
+        /// <param name="alertBehaviour">
+        /// The specific behaviour for when the character is "alert"
+        /// </param>
+        /// <param name="timeToSpot">
+        /// The time it takes the AI to "spot" (i.e. identify) an enemy in view
+        /// </param>
+        /// <returns>
+        /// The complete behaviour
+        /// </returns>
+        public static IBehaviour CreateOrchestratedNpcBehaviour(IBehaviour peacefulBehaviour, IBehaviour alertBehaviour, float timeToSpot)
+        {
+            Debug.Assert(peacefulBehaviour != null);
+            Debug.Assert(alertBehaviour != null);
+
+            IBehaviour baseTask = new DoNothing();
+
+            // Complete orchestrated behaviour.
+            var behaviour = new CheckInterruptResume(
+                    peacefulBehaviour,
+                    new DoSimultaneouslyUntilEitherIsDone(
+                        new SpotEnemy(() => timeToSpot),
+                        CreateLookAroundRelaxed()),
+                    alertBehaviour);
+
+            return behaviour;
+        }
+
         /// <summary>
         /// Creates a (slightly improved) "soldier" behaviour.
         /// </summary>

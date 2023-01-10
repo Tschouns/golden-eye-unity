@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Ai.Behaviour;
+using Assets.Scripts.Ai.Configuration;
 using Assets.Scripts.Ai.Memory;
 using Assets.Scripts.Ai.Patrols;
 using Assets.Scripts.Ai.Perception;
@@ -29,6 +30,12 @@ namespace Assets.Scripts.Ai
         private NavMeshAgent navMeshAgent;
 
         [SerializeField]
+        private AbstractPeacefulBehaviourProvider peacefulBehaviour;
+
+        [SerializeField]
+        private AbstractAlertBehaviourProvider alertBehaviour;
+
+        [SerializeField]
         private float walkingSpeed = 1.0f;
 
         [SerializeField]
@@ -43,6 +50,9 @@ namespace Assets.Scripts.Ai
         [SerializeField]
         private float timeToSpot = 2.0f;
 
+        /// <summary>
+        /// OBSOLETE: no longer has any effect.
+        /// </summary>
         [SerializeField]
         private PatrolPath patrolPath;
 
@@ -64,10 +74,12 @@ namespace Assets.Scripts.Ai
 
         private void Awake()
         {
-            Debug.Assert(this.thisCharacter != null, "No character assigned to AI.");
-            Debug.Assert(this.eyeMovement != null, "No eye movement assigned to AI.");
-            Debug.Assert(this.gunHandler != null, "No gun handler assigned to AI.");
-            Debug.Assert(this.navMeshAgent != null, "No nav mesh agent assigned to AI.");
+            Debug.Assert(this.thisCharacter != null);
+            Debug.Assert(this.eyeMovement != null);
+            Debug.Assert(this.gunHandler != null);
+            Debug.Assert(this.navMeshAgent != null);
+            Debug.Assert(this.peacefulBehaviour != null);
+            Debug.Assert(this.alertBehaviour != null);
 
             this.navMeshAgent.angularSpeed = this.angularSpeed;
 
@@ -80,7 +92,10 @@ namespace Assets.Scripts.Ai
             this.characterAccess = new CharacterAccess(this);
 
             // Setup behaviour.
-            this.behaviour = BehaviourFactory.CreateSoldierBehaviour(this.patrolPath, this.timeToSpot);
+            var peaceful = this.peacefulBehaviour.GetPeacefulBehaviour();
+            var alert = this.alertBehaviour.GetAlertBehaviour();
+
+            this.behaviour = BehaviourFactory.CreateOrchestratedNpcBehaviour(peaceful, alert, this.timeToSpot);
         }
 
         private void Update()
