@@ -4,10 +4,9 @@ using UnityEngine;
 
 namespace Assets.Scripts.Ai.Configuration
 {
-    public abstract class AbstractAlertBehaviourProvider : MonoBehaviour, IVerifyable, IAlertBehaviourProvider
+    public abstract class AbstractAlertBehaviourProvider : MonoBehaviour, IAlertBehaviourProvider, IVerifyable
     {
-        public abstract void Verify();
         public abstract IBehaviour GetAlertBehaviour();
-
+        public abstract void Verify();
     }
 }

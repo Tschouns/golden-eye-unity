@@ -15,6 +15,7 @@ namespace Assets.Scripts.Ai.Patrols
         private IReadOnlyList<IPatrolPoint> LoadPatrolPoints()
         {
             this.patrolPoints = this.GetComponentsInChildren<IPatrolPoint>();
+
             return this.patrolPoints;
         }
     }

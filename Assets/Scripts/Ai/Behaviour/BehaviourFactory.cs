@@ -1,5 +1,4 @@
-﻿
-using Assets.Scripts.Ai.Behaviour.BasicBehaviours;
+﻿using Assets.Scripts.Ai.Behaviour.BasicBehaviours;
 using Assets.Scripts.Ai.Behaviour.SpecificBehaviours;
 using Assets.Scripts.Ai.Patrols;
 using System.Linq;
@@ -11,6 +10,18 @@ namespace Assets.Scripts.Ai.Behaviour
     /// </summary>
     public static class BehaviourFactory
     {
+        /// <summary>
+        /// Creates a (slightly improved) "soldier" behaviour.
+        /// </summary>
+        /// <param name="patrolPathOrNull">
+        /// An optional patrol path
+        /// </param>
+        /// <param name="timeToSpot">
+        /// The time it takes the AI to "spot" (i.e. identify) an enemy in view
+        /// </param>
+        /// <returns>
+        /// The complete behaviour
+        /// </returns>
         public static IBehaviour CreateSoldierBehaviour(IPatrolPath patrolPathOrNull, float timeToSpot)
         {
             IBehaviour baseTask = new DoNothing();
@@ -28,17 +39,7 @@ namespace Assets.Scripts.Ai.Behaviour
                 new FaceForeward());
 
             // "Alert" mode.
-            var engage = new DoSimultaneouslyUntilAllAreDone(
-                    new StandStill(),
-                    new FaceClosestVisibleTarget(),
-                    new CycleThrough(
-                        new DoWithTimeout(new Shoot(), 1.5f),
-                        new DoWithTimeout(new DoNothing(), 1f)));
-
-            var alertBehaviour = new DoWhile(
-                engage,
-                c => c.Memory.ActiveTargets.Any(c => c.IsAlive),
-                "any active targets");
+            var alertBehaviour = CreateEngageActiveTargetsBehaviour();
 
             // Complete orchestrated behaviour.
             var behaviour = new CheckInterruptResume(
@@ -92,6 +93,23 @@ namespace Assets.Scripts.Ai.Behaviour
                     engageBehaviour);
 
             return behaviour;
+        }
+
+        public static IBehaviour CreateEngageActiveTargetsBehaviour()
+        {
+            var engage = new DoSimultaneouslyUntilAllAreDone(
+                new StandStill(),
+                new FaceClosestVisibleTarget(),
+                new CycleThrough(
+                    new DoWithTimeout(new Shoot(), 1.5f),
+                    new DoWithTimeout(new DoNothing(), 1f)));
+
+            var alertBehaviour = new DoWhile(
+                engage,
+                c => c.Memory.ActiveTargets.Any(c => c.IsAlive),
+                "any active targets");
+
+            return alertBehaviour;
         }
 
         private static IBehaviour CreateLookAroundRelaxed()
