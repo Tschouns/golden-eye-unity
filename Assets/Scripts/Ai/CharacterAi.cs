@@ -56,7 +56,6 @@ namespace Assets.Scripts.Ai
         [SerializeField]
         private PatrolPath patrolPath;
 
-        private ICharacterManager characterManager;
         private PerceptionImpl perception;
         private IMemory memory;
         private IBehaviour behaviour;
@@ -84,11 +83,13 @@ namespace Assets.Scripts.Ai
             this.navMeshAgent.angularSpeed = this.angularSpeed;
 
             // Setup the "character access" -- properties of the character the behaviour can access.
-            this.characterManager = FindObjectOfType<CharacterManager>();
-            Debug.Assert(this.characterManager != null);
+            var characterManager = FindObjectOfType<CharacterManager>();
+            Debug.Assert(characterManager != null);
 
-            this.perception = new PerceptionImpl(this.thisCharacter, this.characterManager, () => this.fieldOfView);
-            this.memory = new MemoryImpl();
+            var escapePointManager = FindObjectOfType<EscapePointManager>();
+
+            this.perception = new PerceptionImpl(this.thisCharacter, characterManager, () => this.fieldOfView);
+            this.memory = new MemoryImpl(escapePointManager);
             this.characterAccess = new CharacterAccess(this);
 
             // Setup behaviour.

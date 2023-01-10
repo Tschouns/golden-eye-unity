@@ -1,4 +1,5 @@
 ﻿
+using Assets.Scripts.Ai.Navigation;
 using Assets.Scripts.Characters;
 using System.Collections.Generic;
 
@@ -9,6 +10,11 @@ namespace Assets.Scripts.Ai.Memory
     /// </summary>
     public interface IMemory
     {
+        /// <summary>
+        /// Gets all the available escape points known to the NPC.
+        /// </summary>
+        IEnumerable<IEscapePoint> EscapePoints { get; }
+
         /// <summary>
         /// Gets the NPC's current active targets.
         /// </summary>
