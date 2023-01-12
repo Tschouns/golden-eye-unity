@@ -50,12 +50,6 @@ namespace Assets.Scripts.Ai
         [SerializeField]
         private float timeToSpot = 2.0f;
 
-        /// <summary>
-        /// OBSOLETE: no longer has any effect.
-        /// </summary>
-        [SerializeField]
-        private PatrolPath patrolPath;
-
         private PerceptionImpl perception;
         private IMemory memory;
         private IBehaviour behaviour;
