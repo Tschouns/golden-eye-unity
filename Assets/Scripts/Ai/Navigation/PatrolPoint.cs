@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.Ai.Patrols
+namespace Assets.Scripts.Ai.Navigation
 {
     /// <summary>
     /// Designates an object a patrol point.

@@ -2,7 +2,6 @@ using Assets.Scripts.Characters;
 using Assets.Scripts.Gunplay.Inventory;
 using Assets.Scripts.Missions;
 using System;
-using System.Linq;
 using System.Text;
 using TMPro;
 using UnityEngine;
@@ -88,7 +87,7 @@ namespace Assets.Scripts.Ui
             switch (status)
             {
                 case MissionStatus.InProgress:
-                    return "in progress";    
+                    return "in progress";
                 case MissionStatus.Completed:
                     return "completed";
                 case MissionStatus.Failed:
