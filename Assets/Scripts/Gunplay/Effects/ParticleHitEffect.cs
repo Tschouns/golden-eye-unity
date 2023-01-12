@@ -1,6 +1,5 @@
 using Assets.Scripts.Gunplay.Ballistics;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Assets.Scripts.Gunplay.Effects
@@ -12,7 +11,7 @@ namespace Assets.Scripts.Gunplay.Effects
     {
         public void ReactToImpact(BulletImpact impact)
         {
-            SpawnEffects(
+            this.SpawnEffects(
                 impact.HitMaterial.PenetratedParticleEffectPrefabs,
                 impact.EntryPoint,
                 impact.EntryPoint - impact.EntryDirectionNormalized);
@@ -20,13 +19,13 @@ namespace Assets.Scripts.Gunplay.Effects
             switch (impact.Type)
             {
                 case BulletImpactType.Deflected:
-                    SpawnEffects(
+                    this.SpawnEffects(
                         impact.HitMaterial.DeflectedParticleEffectPrefabs,
                         impact.ExitPoint,
                         impact.ExitPoint + impact.ExitDirectionNormalized);
                     break;
                 case BulletImpactType.Pierced:
-                    SpawnEffects(
+                    this.SpawnEffects(
                         impact.HitMaterial.PiercedParticleEffectPrefabs,
                         impact.ExitPoint,
                         impact.ExitPoint + impact.ExitDirectionNormalized);

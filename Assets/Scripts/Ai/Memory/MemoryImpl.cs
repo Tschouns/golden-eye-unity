@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Characters;
+﻿using Assets.Scripts.Ai.Navigation;
+using Assets.Scripts.Characters;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +11,16 @@ namespace Assets.Scripts.Ai.Memory
     public class MemoryImpl : IMemory
     {
         private readonly IDictionary<ICharacter, CharacterInfo> characterInfos = new Dictionary<ICharacter, CharacterInfo>();
+        private readonly IEscapePointProvider escapePointProvider;
+
+        public MemoryImpl(IEscapePointProvider escapePointProvider)
+        {
+            Debug.Assert(escapePointProvider != null);
+
+            this.escapePointProvider = escapePointProvider;
+        }
+
+        public IEnumerable<IEscapePoint> EscapePoints => this.escapePointProvider.EscapePoints;
 
         public ICollection<ICharacter> ActiveTargets { get; } = new HashSet<ICharacter>();
 

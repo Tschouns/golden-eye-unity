@@ -1,7 +1,6 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Assets.Scripts.Ai.Patrols
+namespace Assets.Scripts.Ai.Navigation
 {
     /// <summary>
     /// Represents a patrol path.

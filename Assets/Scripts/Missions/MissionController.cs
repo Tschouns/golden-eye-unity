@@ -18,44 +18,44 @@ namespace Assets.Scripts.Missions
 
         public MissionStatus Status { get; private set; } = MissionStatus.InProgress;
 
-        public IEnumerable<IMissionObjective> Objectives => missionObjectiveList;
+        public IEnumerable<IMissionObjective> Objectives => this.missionObjectiveList;
 
         private void Awake()
         {
             // Retrieve mission objectives.
-            var goals = GetComponentsInChildren<IMissionObjective>();
-            missionObjectiveList.AddRange(goals);
+            var goals = this.GetComponentsInChildren<IMissionObjective>();
+            this.missionObjectiveList.AddRange(goals);
 
             Debug.Assert(goals.Any(), "There are no mission objectives. Add mission objectives as children of the mission controller.");
         }
 
         private void Update()
         {
-            if (Status is MissionStatus.Completed or
+            if (this.Status is MissionStatus.Completed or
                 MissionStatus.Failed)
             {
                 return;
             }
 
             // If any objective fails, the mission fails.
-            if (Objectives.Any(o => o.Status == MissionStatus.Failed))
+            if (this.Objectives.Any(o => o.Status == MissionStatus.Failed))
             {
-                Status = MissionStatus.Failed;
+                this.Status = MissionStatus.Failed;
                 Failed?.Invoke();
 
                 return;
             }
 
             // Only if and when all the objectives have been successfully completed, the mission is successful.
-            if (Objectives.All(o => o.Status == MissionStatus.Completed))
+            if (this.Objectives.All(o => o.Status == MissionStatus.Completed))
             {
-                Status = MissionStatus.Completed;
+                this.Status = MissionStatus.Completed;
                 Completed?.Invoke();
 
                 return;
             }
 
-            Status = MissionStatus.InProgress;
+            this.Status = MissionStatus.InProgress;
         }
     }
 }

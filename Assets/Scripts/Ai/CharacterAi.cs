@@ -1,23 +1,21 @@
 ﻿using Assets.Scripts.Ai.Behaviour;
-using Assets.Scripts.Ai.Behaviour.BasicBehaviours;
-using Assets.Scripts.Ai.Behaviour.SpecificBehaviours;
+using Assets.Scripts.Ai.Configuration;
 using Assets.Scripts.Ai.Memory;
-using Assets.Scripts.Ai.Patrols;
+using Assets.Scripts.Ai.Navigation;
 using Assets.Scripts.Ai.Perception;
 using Assets.Scripts.Characters;
 using Assets.Scripts.Damage;
 using Assets.Scripts.Misc;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace Assets.Scripts.Ai
 {
     /// <summary>
-    /// Implements the A.I. of a military NPC.
+    /// Implements the A.I. of an NPC.
     /// </summary>
     [RequireComponent(typeof(NavMeshAgent))]
-    public class MilitaryAi : MonoBehaviour, INotifyOnDied
+    public class CharacterAi : MonoBehaviour, INotifyOnDied
     {
         [SerializeField]
         private Character thisCharacter;
@@ -30,6 +28,12 @@ namespace Assets.Scripts.Ai
 
         [SerializeField]
         private NavMeshAgent navMeshAgent;
+
+        [SerializeField]
+        private AbstractPeacefulBehaviourProvider peacefulBehaviour;
+
+        [SerializeField]
+        private AbstractAlertBehaviourProvider alertBehaviour;
 
         [SerializeField]
         private float walkingSpeed = 1.0f;
@@ -46,10 +50,6 @@ namespace Assets.Scripts.Ai
         [SerializeField]
         private float timeToSpot = 2.0f;
 
-        [SerializeField]
-        private PatrolPath patrolPath;
-
-        private ICharacterManager characterManager;
         private PerceptionImpl perception;
         private IMemory memory;
         private IBehaviour behaviour;
@@ -67,46 +67,30 @@ namespace Assets.Scripts.Ai
 
         private void Awake()
         {
-            Debug.Assert(this.thisCharacter != null, "No character assigned to AI.");
-            Debug.Assert(this.eyeMovement != null, "No eye movement assigned to AI.");
-            Debug.Assert(this.gunHandler != null, "No gun handler assigned to AI.");
-            Debug.Assert(this.navMeshAgent != null, "No nav mesh agent assigned to AI.");
+            Debug.Assert(this.thisCharacter != null);
+            Debug.Assert(this.eyeMovement != null);
+            Debug.Assert(this.gunHandler != null);
+            Debug.Assert(this.navMeshAgent != null);
+            Debug.Assert(this.peacefulBehaviour != null);
+            Debug.Assert(this.alertBehaviour != null);
 
             this.navMeshAgent.angularSpeed = this.angularSpeed;
 
-            this.characterManager = FindObjectOfType<CharacterManager>();
-            Debug.Assert(this.characterManager != null);
+            // Setup the "character access" -- properties of the character the behaviour can access.
+            var characterManager = FindObjectOfType<CharacterManager>();
+            Debug.Assert(characterManager != null);
 
-            this.perception = new PerceptionImpl(this.thisCharacter, this.characterManager, () => this.fieldOfView);
-            this.memory = new MemoryImpl();
+            var escapePointManager = FindObjectOfType<EscapePointManager>();
+
+            this.perception = new PerceptionImpl(this.thisCharacter, characterManager, () => this.fieldOfView);
+            this.memory = new MemoryImpl(escapePointManager);
             this.characterAccess = new CharacterAccess(this);
 
-            IBehaviour peacefulBehaviour = new DoNothing();
+            // Setup behaviour.
+            var peaceful = this.peacefulBehaviour.GetPeacefulBehaviour();
+            var alert = this.alertBehaviour.GetAlertBehaviour();
 
-            if (this.patrolPath != null)
-            {
-                peacefulBehaviour = new PatrolEndToEnd(this.patrolPath.PatrolPoints.Select(p => p.Position).ToArray());
-            }
-
-            CycleThrough lookAroundBehaviour = new(
-                new DoWithTimeout(new LookAhead(), 3),
-                new DoWithTimeout(new LookAtClosestVisibleCharacter(), 5));
-
-            DoWithTimeout engageBehaviour = new(
-                new DoSimultaneouslyUntilAllAreDone(
-                    new StandStill(),
-                    new FaceClosestVisibleTarget(),
-                    new CycleThrough(
-                        new DoWithTimeout(new Shoot(), 1.5f),
-                        new DoWithTimeout(new DoNothing(), 1f))),
-                5f);
-
-            this.behaviour = new CheckInterruptResume(
-                    peacefulBehaviour,
-                    new DoSimultaneouslyUntilEitherIsDone(
-                        new SpotEnemy(() => this.timeToSpot),
-                        lookAroundBehaviour),
-                    engageBehaviour);
+            this.behaviour = BehaviourFactory.CreateOrchestratedNpcBehaviour(peaceful, alert, this.timeToSpot);
         }
 
         private void Update()
@@ -143,9 +127,9 @@ namespace Assets.Scripts.Ai
         /// </summary>
         private class CharacterAccess : ICharacterAccess
         {
-            private readonly MilitaryAi ai;
+            private readonly CharacterAi ai;
 
-            public CharacterAccess(MilitaryAi ai)
+            public CharacterAccess(CharacterAi ai)
             {
                 Debug.Assert(ai != null);
 
@@ -162,13 +146,23 @@ namespace Assets.Scripts.Ai
             public void WalkTo(Vector3 destination)
             {
                 this.ai.navMeshAgent.speed = this.ai.walkingSpeed;
+                this.ai.navMeshAgent.isStopped = false;
+
                 _ = this.ai.navMeshAgent.SetDestination(destination);
             }
 
             public void RunTo(Vector3 destination)
             {
                 this.ai.navMeshAgent.speed = this.ai.runnngSpeed;
+                this.ai.navMeshAgent.isStopped = false;
+
                 _ = this.ai.navMeshAgent.SetDestination(destination);
+            }
+
+            public void Stop()
+            {
+                this.ai.navMeshAgent.speed = this.ai.walkingSpeed;
+                this.ai.navMeshAgent.isStopped = true;
             }
 
             public void TurnTowardsPoint(Vector3 targetPoint)

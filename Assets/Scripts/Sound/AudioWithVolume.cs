@@ -1,6 +1,6 @@
-using UnityEngine;
-using System;
 using Assets.Scripts.Misc;
+using System;
+using UnityEngine;
 
 namespace Assets.Scripts.Sound
 {
@@ -17,9 +17,9 @@ namespace Assets.Scripts.Sound
         [Range(0f, 1f)]
         private float volume = 1f;
 
-        public AudioClip Clip => clip;
+        public AudioClip Clip => this.clip;
 
-        public float Volume => volume;
+        public float Volume => this.volume;
 
         public void Verify()
         {
