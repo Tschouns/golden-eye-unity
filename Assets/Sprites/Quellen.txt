@@ -8,3 +8,6 @@ Logo:
 https://gamerant.com/goldeneye-007-remaster-gameplay-xbox-360/
 N64 Logo:
 https://gamesided.com/2014/03/15/nintendo-64-know/
+
+HealthBar:
+https://github.com/Brackeys/Health-Bar
