@@ -8,6 +8,11 @@ namespace Assets.Scripts.Damage
     public interface IHealth
     {
         /// <summary>
+        /// Is fired when the health has changed.
+        /// </summary>
+        event Action HealthChanged;
+
+        /// <summary>
         /// Is fired when the entity has died.
         /// </summary>
         event Action Died;

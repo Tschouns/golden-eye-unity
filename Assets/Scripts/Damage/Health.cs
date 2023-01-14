@@ -15,6 +15,8 @@ namespace Assets.Scripts.Damage
 
         public event Action Died;
 
+        public event Action HealthChanged;
+
         public int MaxHealth => Math.Abs(this.maxHealth);
 
         public int CurrentHealth { get; private set; }
@@ -32,6 +34,8 @@ namespace Assets.Scripts.Damage
                 this.hasDied = true;
                 Died?.Invoke();
             }
+            // Fire "health changed" event.
+            HealthChanged?.Invoke();
         }
 
         private void Awake()
