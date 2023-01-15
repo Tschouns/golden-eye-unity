@@ -9,6 +9,8 @@ namespace Assets.Scripts.Gunplay.Ballistics
     /// </summary>
     public static class BallisticsHelper
     {
+        private static readonly int maxDepth = 20;
+
         /// <summary>
         /// Simulates shooting a projectile. Calls targets (i.e. implementations of <see cref="IHitTarget"/>) when hit, so they
         /// can react to the bullet impact.
@@ -25,8 +27,26 @@ namespace Assets.Scripts.Gunplay.Ballistics
         /// <param name="velocity">
         /// The bullet velocity
         /// </param>
-        public static void ShootProjectile(Vector3 origin, Vector3 direction, float bulletMass, float velocity)
+        /// <param name="dragFactor">
+        /// A factor which scales the bullets drag (proportional to the velocity loss from piercing a target)
+        /// </param>
+        public static void ShootProjectile(Vector3 origin, Vector3 direction, float bulletMass, float velocity, float dragFactor)
         {
+            CastProjectileInternal(origin, direction, bulletMass, velocity, 0, dragFactor);
+        }
+
+        private static void CastProjectileInternal(Vector3 origin, Vector3 direction, float bulletMass, float velocity, int currentDepth, float dragFactor)
+        {
+            // Recursion safety.
+            if (currentDepth > maxDepth)
+            {
+                Debug.LogWarning("Reached max depth.");
+                return;
+            }
+
+            currentDepth++;
+
+            // Detect and process hit.
             var shotDirectionNormalized = direction.normalized;
 
             // TODO: add layer mask?
@@ -46,12 +66,12 @@ namespace Assets.Scripts.Gunplay.Ballistics
                     continue;
                 }
 
-                ProcessHit(hit, target, shotDirectionNormalized, bulletMass, velocity);
+                ProcessHit(hit, target, shotDirectionNormalized, bulletMass, velocity, currentDepth, dragFactor);
                 break;
             }
         }
 
-        private static void ProcessHit(RaycastHit hit, IHitTarget target, Vector3 shotDirectionNormalized, float bulletMass, float velocity)
+        private static void ProcessHit(RaycastHit hit, IHitTarget target, Vector3 shotDirectionNormalized, float bulletMass, float velocity, int currentDepth, float dragFactor)
         {
             // Find (hypothetical) exit point.
             var supportPoint = hit.point + shotDirectionNormalized;
@@ -60,7 +80,7 @@ namespace Assets.Scripts.Gunplay.Ballistics
                 supportPoint += shotDirectionNormalized;
             }
 
-            var allReverseHits = Physics.RaycastAll(supportPoint, -shotDirectionNormalized, (supportPoint - hit.point).magnitude);
+            var allReverseHits = Physics.RaycastAll(supportPoint, -shotDirectionNormalized, (supportPoint - hit.point).magnitude * 2);
             var reverseHit = allReverseHits.First(r => r.collider == hit.collider);
             var exitPoint = reverseHit.point;
             var exitSurfaceNormal = reverseHit.normal;
@@ -94,7 +114,7 @@ namespace Assets.Scripts.Gunplay.Ballistics
                 // Simulate the deflected bullet, a.k.a. "ricochet".
                 var reducedVelocity = (velocity - directImpactVelocity) * Mathf.Clamp(target.Material.Bouncyness, 0, 1);
 
-                ShootProjectile(hit.point, randomizedReflectedDirection, bulletMass, reducedVelocity);
+                CastProjectileInternal(hit.point, randomizedReflectedDirection, bulletMass, reducedVelocity, currentDepth, dragFactor);
 
                 return;
             }
@@ -102,6 +122,8 @@ namespace Assets.Scripts.Gunplay.Ballistics
             // Pierce.
             if (velocity > target.Material.PierceAtVelocity)
             {
+                var lostVelocity = target.Material.PierceAtVelocity * dragFactor;
+
                 // Calculate the exit bullet direction.
                 var randomizedShotDirection = TransformHelper.RandomRotate(shotDirectionNormalized, 0.1f);
 
@@ -115,14 +137,14 @@ namespace Assets.Scripts.Gunplay.Ballistics
                     ExitDirectionNormalized = randomizedShotDirection,
                     ExitSurfaceNormal = exitSurfaceNormal,
                     BulletMass = bulletMass,
-                    Velocity = target.Material.PierceAtVelocity,
+                    Velocity = lostVelocity,
                     HitMaterial = target.Material,
                 });
 
                 // Simulate the bullet as it exits the target.
-                var remainingVelocity = velocity - target.Material.PierceAtVelocity;
+                var remainingVelocity = velocity - lostVelocity;
 
-                ShootProjectile(exitPoint, randomizedShotDirection, bulletMass, remainingVelocity);
+                CastProjectileInternal(exitPoint, randomizedShotDirection, bulletMass, remainingVelocity, currentDepth, dragFactor);
 
                 return;
             }

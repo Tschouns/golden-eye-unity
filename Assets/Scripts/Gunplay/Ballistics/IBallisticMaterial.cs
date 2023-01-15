@@ -26,6 +26,16 @@ namespace Assets.Scripts.Gunplay.Ballistics
         float Bouncyness { get; }
 
         /// <summary>
+        /// Gets the prefabs for the bullet entry holes.
+        /// </summary>
+        IEnumerable<GameObject> BulletEntryHolePrefabs { get; }
+
+        /// <summary>
+        /// Gets the prefabs for the bullet exit holes.
+        /// </summary>
+        IEnumerable<GameObject> BulletExitHolePrefabs { get; }
+
+        /// <summary>
         /// Gets the SoundEmitter for the "penetrated" sound.
         /// </summary>
         ISoundEmitter PenetratedSoundEmitter { get; }
@@ -41,9 +51,9 @@ namespace Assets.Scripts.Gunplay.Ballistics
         ISoundEmitter DeflectedSoundEmitter { get; }
 
         /// <summary>
-        /// Gets the prefabs for the "penetrated" particle effects.
+        /// Gets the prefabs for the "base" particle effects. Is always applied, no matter the hit type.
         /// </summary>
-        IEnumerable<GameObject> PenetratedParticleEffectPrefabs { get; }
+        IEnumerable<GameObject> BaseParticleEffectPrefabs { get; }
 
         /// <summary>
         /// Gets the prefabs for the "pierced" particle effects.

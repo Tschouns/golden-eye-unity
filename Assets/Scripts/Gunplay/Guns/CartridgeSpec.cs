@@ -13,12 +13,13 @@ namespace Assets.Scripts.Gunplay.Guns
         private string uniqueName;
 
         [SerializeField]
-        [Range(0.0001f, 1f)]
         private float bulletMass = 0.00745f; // 9x19mm Para. FMJ
 
         [SerializeField]
-        [Range(100f, 5000f)]
         private float muzzleVelocity = 360; // 9x19mm Para. FMJ
+
+        [SerializeField]
+        private float bulletDragFactor = 1f;
 
         [SerializeField]
         private int maxNumberOfBullets = 100;
@@ -31,12 +32,14 @@ namespace Assets.Scripts.Gunplay.Guns
         public float MuzzleVelocity => this.muzzleVelocity;
         public int MaxNumberOfInventoryBullets => this.maxNumberOfBullets;
         public int InitialNumberOfInventoryBullets => this.startingNumberOfBullets;
+        public float BulletDragFactor => this.bulletDragFactor;
 
         public void Verify()
         {
             Debug.Assert(!string.IsNullOrEmpty(this.uniqueName));
             Debug.Assert(this.bulletMass > 0);
             Debug.Assert(this.muzzleVelocity > 0);
+            Debug.Assert(this.bulletDragFactor > 0);
             Debug.Assert(this.maxNumberOfBullets > 0);
             Debug.Assert(this.startingNumberOfBullets > 0);
         }

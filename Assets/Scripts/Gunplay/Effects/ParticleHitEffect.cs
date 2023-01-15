@@ -12,7 +12,7 @@ namespace Assets.Scripts.Gunplay.Effects
         public void ReactToImpact(BulletImpact impact)
         {
             this.SpawnEffects(
-                impact.HitMaterial.PenetratedParticleEffectPrefabs,
+                impact.HitMaterial.BaseParticleEffectPrefabs,
                 impact.EntryPoint,
                 impact.EntryPoint - impact.EntryDirectionNormalized);
 
@@ -47,8 +47,7 @@ namespace Assets.Scripts.Gunplay.Effects
                     var effect = Instantiate(
                         prefab,
                         position,
-                        Quaternion.identity,
-                        this.gameObject.transform);
+                        Quaternion.identity);
 
                     effect.transform.LookAt(lookAtPoint, Vector3.up);
                 }

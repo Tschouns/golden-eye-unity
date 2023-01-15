@@ -1,4 +1,6 @@
 ﻿
+using Assets.Scripts.Sound;
+
 namespace Assets.Scripts.Gunplay.Guns
 {
     /// <summary>
@@ -46,5 +48,20 @@ namespace Assets.Scripts.Gunplay.Guns
         /// Gets the maximum angular deviation [rad] for any shot fired.
         /// </summary>
         public float MaxDeviationRadians { get; }
+
+        /// <summary>
+        /// Gets the sound to play when shooting.
+        /// </summary>
+        public ISoundEmitter ShootSound { get; }
+
+        /// <summary>
+        /// Gets the sound to play when dry-firing.
+        /// </summary>
+        public ISoundEmitter DryFireSound { get; }
+
+        /// <summary>
+        /// Gets the sound to play when reloading.
+        /// </summary>
+        public ISoundEmitter ReloadSound { get; }
     }
 }
