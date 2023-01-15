@@ -22,5 +22,11 @@ namespace Assets.Scripts.Props
                 this.offModelRenderer.enabled = !value;
             }
         }
+
+        private void Awake()
+        {
+            Debug.Assert(this.onModelRenderer != null);
+            Debug.Assert(this.offModelRenderer != null);
+        }
     }
 }

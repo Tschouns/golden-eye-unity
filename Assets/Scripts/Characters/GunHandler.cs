@@ -212,18 +212,21 @@ namespace Assets.Scripts.Characters
 
         private IEnumerator ReloadAnimated(int availableNumberOfBullets)
         {
+            var rotationTarget = 70f;
+            var rotationTime = rotationTarget / this.rotatingArm.AngularSpeed;
+
             this.isReloading = true;
 
             // Take arm down.
-            this.rotatingArm.SetRotationTarget(90);
-            yield return new WaitForSeconds(this.Gun.Properties.ReloadTime / 2);
+            this.rotatingArm.SetRotationTarget(rotationTarget);
+            yield return new WaitForSeconds(this.Gun.Properties.ReloadTime - rotationTime);
 
             // Reload.
             this.Gun.Reload(availableNumberOfBullets);
 
             // Take arm up.
             this.rotatingArm.SetRotationTarget(0);
-            yield return new WaitForSeconds(this.Gun.Properties.ReloadTime / 2);
+            yield return new WaitForSeconds(rotationTime);
 
             this.isReloading = false;
             yield return null;

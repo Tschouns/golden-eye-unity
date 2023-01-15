@@ -37,13 +37,13 @@ namespace Assets.Scripts.Gunplay.Guns
         private float maxDeviationDegrees = 5f;
 
         [SerializeField]
-        private SimpleSoundEmitter shootSound;
+        private AbstractSoundEmitter shootSound;
 
         [SerializeField]
-        private SimpleSoundEmitter dryFireSound;
+        private AbstractSoundEmitter dryFireSound;
 
         [SerializeField]
-        private SimpleSoundEmitter reloadSound;
+        private AbstractSoundEmitter reloadSound;
 
         public string UniqueName => this.uniqueName;
         public ICartridgeSpec Cartridge => this.cartridge;
@@ -53,21 +53,9 @@ namespace Assets.Scripts.Gunplay.Guns
         public int ClipSize => this.clipSize;
         public float ReloadTime => this.reloadTime;
         public float MaxDeviationRadians => this.maxDeviationDegrees * Mathf.Deg2Rad;
-
-        /// <summary>
-        /// Gets the sound to play when shooting.
-        /// </summary>
-        public SimpleSoundEmitter ShootSound => this.shootSound;
-
-        /// <summary>
-        /// Gets the sound to play when dry-firing.
-        /// </summary>
-        public SimpleSoundEmitter DryFireSound => this.dryFireSound;
-
-        /// <summary>
-        /// Gets the sound to play when reloading.
-        /// </summary>
-        public SimpleSoundEmitter ReloadSound => this.reloadSound;
+        public ISoundEmitter ShootSound => this.shootSound;
+        public ISoundEmitter DryFireSound => this.dryFireSound;
+        public ISoundEmitter ReloadSound => this.reloadSound;
 
         public void Verify()
         {

@@ -22,6 +22,11 @@ namespace Assets.Scripts.Gunplay.Guns
         float MuzzleVelocity { get; }
 
         /// <summary>
+        /// Gets the bullet "drag factor" (i.e. a factor to modify the velocity loss from piercing targets).
+        /// </summary>
+        float BulletDragFactor { get; }
+
+        /// <summary>
         /// Gets the maximum number of bullets of this type a character can carry in their inventory.
         /// </summary>
         int MaxNumberOfInventoryBullets { get; }

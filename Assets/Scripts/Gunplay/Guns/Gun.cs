@@ -26,6 +26,9 @@ namespace Assets.Scripts.Gunplay.Guns
         [SerializeField]
         private bool startLoaded = true;
 
+        [SerializeField]
+        private AbstractShotEffect[] shotEffects = new AbstractShotEffect[0];
+
         private bool isTriggerActive = false;
         private bool isTriggerEntryProcessed = false;
         private bool isReady = true;
@@ -52,7 +55,7 @@ namespace Assets.Scripts.Gunplay.Guns
 
             this.isCocked = true;
             this.properties.ReloadSound.Play(this.transform.position);
-            this.StartCoroutine(this.ResetReadynessAfter(this.properties.ReloadTime));
+            this.StartCoroutine(this.ResetReadynessAfter(1f / this.properties.FireRate));
 
             return numberOfBulletsToTake;
         }
@@ -73,9 +76,10 @@ namespace Assets.Scripts.Gunplay.Guns
 
         private void Awake()
         {
-            Debug.Assert(this.muzzle != null, "Muzzle is not set.");
-            Debug.Assert(this.properties != null, "Properties are not set.");
-            Debug.Assert(this.myRigidbody != null, "Rigidbody is not set.");
+            Debug.Assert(this.muzzle != null);
+            Debug.Assert(this.properties != null);
+            Debug.Assert(this.myRigidbody != null);
+            Debug.Assert(this.shotEffects != null);
             this.properties.Verify();
 
             if (this.startWithPhysics)
@@ -142,15 +146,30 @@ namespace Assets.Scripts.Gunplay.Guns
                 this.muzzle.position,
                 randomizedShotDirection,
                 this.properties.Cartridge.BulletMass,
-                this.properties.Cartridge.MuzzleVelocity);
+                this.properties.Cartridge.MuzzleVelocity,
+                this.properties.Cartridge.BulletDragFactor);
 
             this.CurrentNumberOfBullets--;
             this.properties.ShootSound.Play(this.muzzle.position);
+            this.PlayShotEffects();
 
             // Cooldown.
             this.StartCoroutine(this.ResetReadynessAfter(1f / this.properties.FireRate));
 
             return true;
+        }
+
+        private void PlayShotEffects()
+        {
+            if (this.shotEffects == null)
+            {
+                return;
+            }
+
+            foreach (var effect in this.shotEffects)
+            {
+                effect?.Play();
+            }
         }
 
         private IEnumerator ResetReadynessAfter(float seconds)

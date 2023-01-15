@@ -2,7 +2,10 @@ using UnityEngine;
 
 namespace Assets.Scripts.Misc
 {
-    public class RotateToTarget : MonoBehaviour
+    /// <summary>
+    /// Rotates around its local X-axis.
+    /// </summary>
+    public class RotateToTarget : MonoBehaviour, IRotateToTarget
     {
         [SerializeField]
         private float angularSpeed = 180;
@@ -10,6 +13,8 @@ namespace Assets.Scripts.Misc
         private float startRotationX;
         private float targetRotationOffsetX = 0f;
         private float currentRotationCurrentX = 0f;
+
+        public float AngularSpeed { get => this.angularSpeed; set => this.angularSpeed = value; }
 
         public void SetRotationTarget(float rotationDeg)
         {
