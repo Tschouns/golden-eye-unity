@@ -26,14 +26,14 @@ namespace Assets.Scripts.Ai.Behaviour.BasicBehaviours
 
         private IBehaviour CurrentStep => this.steps[this.current];
 
-        public void Update(ICharacterAccess characterAccess)
+        public void Update(ICharacterAccess characterAccess, float deltaTime)
         {
             if (this.IsDone)
             {
                 return;
             }
 
-            this.CurrentStep.Update(characterAccess);
+            this.CurrentStep.Update(characterAccess, deltaTime);
 
             if (this.CurrentStep.IsDone)
             {

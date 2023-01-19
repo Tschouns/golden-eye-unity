@@ -22,7 +22,7 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
             this.currentEscapeTarget = null;
         }
 
-        public void Update(ICharacterAccess characterAccess)
+        public void Update(ICharacterAccess characterAccess, float deltaTime)
         {
             if (this.IsDone)
             {

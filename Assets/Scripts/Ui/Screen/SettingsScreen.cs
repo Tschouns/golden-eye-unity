@@ -78,7 +78,7 @@ namespace Assets.Scripts.Ui.Screen
 
             // Key Bindings
             var keyBindings = this.keysUiController.GetKeyBindings();
-            ControlsProvider.SaveAndReloadPlayerActions(keyBindings);
+            ControlsProvider.SetKeyBindings(keyBindings);
         }
 
         /// <summary>

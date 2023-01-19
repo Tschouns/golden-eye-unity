@@ -26,6 +26,6 @@
         /// <param name="characterAccess">
         /// The character access instance, allowing the behaviour to act upon the character
         /// </param>
-        void Update(ICharacterAccess characterAccess);
+        void Update(ICharacterAccess characterAccess, float deltaTime);
     }
 }

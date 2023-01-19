@@ -33,7 +33,7 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
             this.IsDone = false;
         }
 
-        public void Update(ICharacterAccess characterAccess)
+        public void Update(ICharacterAccess characterAccess, float deltaTime)
         {
             var evatualtion = this.condition(characterAccess);
             if (!evatualtion || this.baseBehaviour.IsDone)
@@ -42,7 +42,7 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
                 return;
             }
 
-            this.baseBehaviour.Update(characterAccess);
+            this.baseBehaviour.Update(characterAccess, deltaTime);
         }
     }
 }

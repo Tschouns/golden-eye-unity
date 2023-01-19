@@ -9,7 +9,7 @@ namespace Assets.Scripts.Gunplay.Ballistics
     /// </summary>
     public static class BallisticsHelper
     {
-        private static readonly int maxDepth = 20;
+        private static readonly int maxDepth = 5;
 
         /// <summary>
         /// Simulates shooting a projectile. Calls targets (i.e. implementations of <see cref="IHitTarget"/>) when hit, so they

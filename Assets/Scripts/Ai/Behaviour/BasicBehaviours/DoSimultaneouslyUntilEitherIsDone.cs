@@ -30,11 +30,11 @@ namespace Assets.Scripts.Ai.Behaviour.BasicBehaviours
             }
         }
 
-        public void Update(ICharacterAccess characterAccess)
+        public void Update(ICharacterAccess characterAccess, float deltaTime)
         {
             foreach (var behaviour in this.behaviours.Where(b => !b.IsDone))
             {
-                behaviour.Update(characterAccess);
+                behaviour.Update(characterAccess, deltaTime);
             }
         }
     }

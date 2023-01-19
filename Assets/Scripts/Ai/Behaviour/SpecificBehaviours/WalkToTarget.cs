@@ -20,7 +20,7 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
 
         public bool IsDone { get; private set; } = false;
 
-        public void Update(ICharacterAccess characterAccess)
+        public void Update(ICharacterAccess characterAccess, float deltaTime)
         {
             if (Vector3.Distance(characterAccess.Character.Position, this.destination) < 0.5f)
             {

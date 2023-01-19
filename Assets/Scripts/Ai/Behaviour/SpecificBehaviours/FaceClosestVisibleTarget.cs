@@ -16,7 +16,7 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
         {
         }
 
-        public void Update(ICharacterAccess characterAccess)
+        public void Update(ICharacterAccess characterAccess, float deltaTime)
         {
             var visibleTargets = characterAccess.Memory.ActiveTargets
                 .Where(t => characterAccess.Perception.CharactersInView.Contains(t))

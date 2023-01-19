@@ -14,7 +14,7 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
         {
         }
 
-        public void Update(ICharacterAccess characterAccess)
+        public void Update(ICharacterAccess characterAccess, float deltaTime)
         {
             if (characterAccess.Perception.TryDequeNoise(out var noise))
             {
