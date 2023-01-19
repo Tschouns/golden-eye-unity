@@ -12,6 +12,7 @@ namespace Assets.Scripts.Missions
     public class MissionController : MonoBehaviour, IMission
     {
         private readonly IList<IMissionObjective> missionObjectiveList = new List<IMissionObjective>();
+        private readonly IList<IMissionObjective> mandatoryMissionObjectives = new List<IMissionObjective>();
 
         public event Action Completed;
         public event Action Failed;
@@ -23,10 +24,11 @@ namespace Assets.Scripts.Missions
         private void Awake()
         {
             // Retrieve mission objectives.
-            var goals = this.GetComponentsInChildren<IMissionObjective>();
-            this.missionObjectiveList.AddRange(goals);
+            var objectives = this.GetComponentsInChildren<IMissionObjective>();
+            Debug.Assert(objectives.Any(), "There are no mission objectives. Add mission objectives as children of the mission controller.");
 
-            Debug.Assert(goals.Any(), "There are no mission objectives. Add mission objectives as children of the mission controller.");
+            this.missionObjectiveList.AddRange(objectives.OrderBy(o => o.IsOptional));
+            this.mandatoryMissionObjectives.AddRange(objectives.Where(o => !o.IsOptional));
         }
 
         private void Update()
@@ -37,8 +39,8 @@ namespace Assets.Scripts.Missions
                 return;
             }
 
-            // If any objective fails, the mission fails.
-            if (this.Objectives.Any(o => o.Status == MissionStatus.Failed))
+            // If any (mandatory) objective fails, the mission fails.
+            if (this.mandatoryMissionObjectives.Any(o => o.Status == MissionStatus.Failed))
             {
                 this.Status = MissionStatus.Failed;
                 Failed?.Invoke();
@@ -46,8 +48,8 @@ namespace Assets.Scripts.Missions
                 return;
             }
 
-            // Only if and when all the objectives have been successfully completed, the mission is successful.
-            if (this.Objectives.All(o => o.Status == MissionStatus.Completed))
+            // Only if and when all the (mandatory) objectives have been successfully completed, the mission is successful.
+            if (this.mandatoryMissionObjectives.All(o => o.Status == MissionStatus.Completed))
             {
                 this.Status = MissionStatus.Completed;
                 Completed?.Invoke();

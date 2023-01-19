@@ -76,7 +76,8 @@ namespace Assets.Scripts.Ui
 
             foreach (var objective in this.missionController.Objectives)
             {
-                text.AppendLine($"- {objective.Description}: {this.GetStatusText(objective.Status)}");
+                var optionalPrefix = objective.IsOptional ? "Optional: " : "";
+                text.AppendLine($"- {optionalPrefix}{objective.Description}: {this.GetStatusText(objective.Status)}");
             }
 
             this.missionObjectivesText.text = text.ToString();

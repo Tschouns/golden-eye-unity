@@ -50,6 +50,11 @@ namespace Assets.Scripts.Gunplay.Guns
         public float MaxDeviationRadians { get; }
 
         /// <summary>
+        /// Gets the distance over which the gun is audible.
+        /// </summary>
+        public float AudibleDistance { get; }
+
+        /// <summary>
         /// Gets the sound to play when shooting.
         /// </summary>
         public ISoundEmitter ShootSound { get; }

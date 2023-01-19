@@ -19,12 +19,16 @@ namespace Assets.Scripts.Missions.Objectives
         private string description = "Do not harm characters.";
 
         [SerializeField]
+        private bool isOptional = false;
+
+        [SerializeField]
         private string faction = "soviet";
 
         [SerializeField]
         private string characterType = "civilian";
 
         public string Description => this.description;
+        public bool IsOptional => this.isOptional;
         public MissionStatus Status { get; private set; } = MissionStatus.Completed;
 
         private void Awake()

@@ -8,15 +8,15 @@ using UnityEngine;
 namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
 {
     /// <summary>
-    /// Continuously tries to spot an enemy. Is done as soon as an enemy has been spotted.
+    /// Continuously tries to spot enemies, and adds spotted enemies to the memory.
     /// </summary>
-    public class SpotEnemy : IBehaviour
+    public class SpotEnemies : IBehaviour
     {
         private readonly Func<float> getTimeToSpot;
 
         private readonly IDictionary<ICharacter, CharacterData> characters = new Dictionary<ICharacter, CharacterData>();
 
-        public SpotEnemy(Func<float> getTimeToSpot)
+        public SpotEnemies(Func<float> getTimeToSpot)
         {
             Debug.Assert(getTimeToSpot != null);
 
@@ -27,11 +27,10 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
 
         public string Description { get; }
 
-        public bool IsDone { get; private set; } = false;
+        public bool IsDone { get; } = false;
 
         public void Reset()
         {
-            this.IsDone = false;
             this.characters.Clear();
         }
 
@@ -51,14 +50,9 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
 
             if (spottedEnemies.Any())
             {
-                this.IsDone = true;
-
                 foreach (var enemy in spottedEnemies)
                 {
-                    if (!characterAccess.Memory.ActiveTargets.Contains(enemy))
-                    {
-                        characterAccess.Memory.ActiveTargets.Add(enemy);
-                    }
+                    _ = characterAccess.Memory.TryAddActiveTarget(enemy);
                 }
             }
         }

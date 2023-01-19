@@ -1,6 +1,6 @@
 ﻿using Assets.Scripts.Ai.Behaviour.BasicBehaviours;
 using Assets.Scripts.Ai.Behaviour.SpecificBehaviours;
-using Assets.Scripts.Ai.Navigation;
+using Assets.Scripts.Noise;
 using System.Linq;
 using UnityEngine;
 
@@ -12,138 +12,161 @@ namespace Assets.Scripts.Ai.Behaviour
     public static class BehaviourFactory
     {
         /// <summary>
-        /// Creates the basic orchestrated NPC behaviour, where characters can be in "peaceful" or "alert" mode.
+        /// Creates an orchestrated NPC behaviour, where characters can be in "peaceful" or "alert" mode.
         /// </summary>
-        /// <param name="peacefulBehaviour">
-        /// The specific behaviour for when the character is "peaceful"
+        /// <param name="peacefulTask">
+        /// The specific task a character performs while "peaceful"
         /// </param>
-        /// <param name="alertBehaviour">
-        /// The specific behaviour for when the character is "alert"
+        /// <param name="alertTask">
+        /// The specific task a character performs while "alert"
         /// </param>
         /// <param name="timeToSpot">
         /// The time it takes the AI to "spot" (i.e. identify) an enemy in view
         /// </param>
         /// <returns>
-        /// The complete behaviour
+        /// The orchestrates NPC behaviour
         /// </returns>
-        public static IBehaviour CreateOrchestratedNpcBehaviour(IBehaviour peacefulBehaviour, IBehaviour alertBehaviour, float timeToSpot)
+        public static IBehaviour CreateOrchestratedNpcBehaviour(IBehaviour peacefulTask, IBehaviour alertTask, float timeToSpot)
         {
-            Debug.Assert(peacefulBehaviour != null);
-            Debug.Assert(alertBehaviour != null);
+            Debug.Assert(peacefulTask != null);
+            Debug.Assert(alertTask != null);
 
-            IBehaviour baseTask = new DoNothing();
-
-            // Complete orchestrated behaviour.
-            var behaviour = new CheckInterruptResume(
-                    peacefulBehaviour,
-                    new DoSimultaneouslyUntilEitherIsDone(
-                        new SpotEnemy(() => timeToSpot),
-                        CreateLookAroundRelaxed()),
-                    alertBehaviour);
-
-            return behaviour;
-        }
-
-        /// <summary>
-        /// Creates a (slightly improved) "soldier" behaviour.
-        /// </summary>
-        /// <param name="patrolPathOrNull">
-        /// An optional patrol path
-        /// </param>
-        /// <param name="timeToSpot">
-        /// The time it takes the AI to "spot" (i.e. identify) an enemy in view
-        /// </param>
-        /// <returns>
-        /// The complete behaviour
-        /// </returns>
-        public static IBehaviour CreateSoldierBehaviour(IPatrolPath patrolPathOrNull, float timeToSpot)
-        {
-            IBehaviour baseTask = new DoNothing();
-
-            if (patrolPathOrNull != null)
-            {
-                baseTask = new PatrolEndToEnd(patrolPathOrNull.PatrolPoints.Select(p => p.Position).ToArray());
-            }
-
-            // "Peaceful" mode.
-            var peacefulBehaviour = new DoSimultaneouslyUntilAllAreDone(
-                new CycleThrough(
-                    new DoWithTimeout(baseTask, 12f),
-                    new DoWithTimeout(new StandStill(), 3f)),
-                new FaceForeward());
-
-            // "Alert" mode.
-            var alertBehaviour = CreateEngageActiveTargetsBehaviour();
-
-            // Complete orchestrated behaviour.
-            var behaviour = new CheckInterruptResume(
-                    peacefulBehaviour,
-                    new DoSimultaneouslyUntilEitherIsDone(
-                        new SpotEnemy(() => timeToSpot),
-                        CreateLookAroundRelaxed()),
-                    alertBehaviour);
-
-            return behaviour;
-        }
-
-        /// <summary>
-        /// Creates the original stupid "military AI" prototype behaviour.
-        /// </summary>
-        /// <param name="patrolPathOrNull">
-        /// An optional patrol path
-        /// </param>
-        /// <param name="timeToSpot">
-        /// The time it takes the AI to "spot" (i.e. identify) an enemy in view
-        /// </param>
-        /// <returns>
-        /// The complete behaviour
-        /// </returns>
-        public static IBehaviour CreateLegacyMilitaryAiBehaviour(IPatrolPath patrolPathOrNull, float timeToSpot)
-        {
-            // Peacful behaviour.
-            IBehaviour peacefulBehaviour = new DoNothing();
-
-            if (patrolPathOrNull != null)
-            {
-                peacefulBehaviour = new PatrolEndToEnd(patrolPathOrNull.PatrolPoints.Select(p => p.Position).ToArray());
-            }
-
-            // Engage behaviour.
-            var engageBehaviour = new DoWithTimeout(
+            var completePeacefulBehaviour = new DoWhile(
                 new DoSimultaneouslyUntilAllAreDone(
-                    new StandStill(),
-                    new FaceClosestVisibleTarget(),
+                    CreateLookAroundRelaxed(),
                     new CycleThrough(
-                        new DoWithTimeout(new Shoot(), 1.5f),
-                        new DoWithTimeout(new DoNothing(), 1f))),
-                5f);
+                        new DoWhile(peacefulTask, c => !c.Memory.NoisesHeard.Any(), "no noises heard"),
+                        new DoWithTimeout(new InvestigateNoise(), 15f),
+                        new DoWithTimeout(new LookAhead(), 2f))),
+                c => !HasAnyThreats(c),
+                "has no threats");
 
-            // Complete orchestrated behaviour.
-            var behaviour = new CheckInterruptResume(
-                    peacefulBehaviour,
+            var orchestratedBehaviour = new DoSimultaneouslyUntilAllAreDone(
+                new ListenForNoise(),
+                new ForgetHeardNoisesAfterSeconds(10),
+                new SpotEnemies(() => timeToSpot),
+                new CycleThrough(
+                    new FaceForeward(),
+                    completePeacefulBehaviour,
                     new DoSimultaneouslyUntilEitherIsDone(
-                        new SpotEnemy(() => timeToSpot),
-                        CreateLookAroundRelaxed()),
-                    engageBehaviour);
+                        new LookAtClosestVisibleAliveTarget(),
+                        alertTask)));
+
+            return orchestratedBehaviour;
+        }
+
+        /// <summary>
+        /// Creates a behaviour where an NPC will stand guard at (and return to) a specific position.
+        /// </summary>
+        /// <param name="position">
+        /// The character's guard position
+        /// </param>
+        /// <param name="faceDirection">
+        /// The character's looking direction while guarding
+        /// </param>
+        /// <returns>
+        /// The NPC behaviour
+        /// </returns>
+        public static IBehaviour CreateStandGuardAtPositionBehaviour(Vector3 position, Vector3 faceDirection)
+        {
+            var behaviour = new DoSimultaneouslyUntilAllAreDone(
+                CreateLookAroundRelaxed(),
+                new DoInOrder(
+                    new WalkToTarget(position),
+                    new DoWithTimeout(new FaceDirection(faceDirection), 3f),
+                    new FaceForeward()));
 
             return behaviour;
         }
 
+        /// <summary>
+        /// Creates a behaviour where an NPC will patrol along a specified path.
+        /// </summary>
+        /// <param name="patrolPointPositions">
+        /// The patrol point positions
+        /// </param>
+        /// <returns>
+        /// The NPC behaviour
+        /// </returns>
+        public static IBehaviour CreatePatrolAlongPathBehaviour(Vector3[] patrolPointPositions)
+        {
+            var patrolBehaviour = new PatrolEndToEnd(patrolPointPositions);
+
+            return patrolBehaviour;
+        }
+
+        /// <summary>
+        /// Creates a behaviour where an NPC will investigate gunshots and engage active targets.
+        /// </summary>
+        /// <returns>
+        /// The NPC behaviour
+        /// </returns>
         public static IBehaviour CreateEngageActiveTargetsBehaviour()
         {
-            var engage = new DoSimultaneouslyUntilAllAreDone(
-                new StandStill(),
-                new FaceClosestVisibleTarget(),
-                new CycleThrough(
-                    new DoWithTimeout(new Shoot(), 1.5f),
-                    new DoWithTimeout(new DoNothing(), 1f)));
+            var fire = new CycleThrough(
+                new DoWithTimeout(new Shoot(), 1.2f),
+                new DoWithTimeout(new DoNothing(), 1f));
 
-            var alertBehaviour = new DoWhile(
-                engage,
-                c => c.Memory.ActiveTargets.Any(c => c.IsAlive),
-                "any active targets");
+            var shootAndReloadOnce = new DoInOrder(
+                new DoWhile(
+                    fire,
+                    c =>
+                        c.GunHandler.Gun.CurrentNumberOfBullets > 0 &&
+                        HasVisibleAliveTarget(c),
+                    "gun has bullets"),
+                new ReloadGun());
+
+            var shootAndReloadContinuously = new CycleThrough(
+                shootAndReloadOnce,
+                new DoWithTimeout(new DoNothing(), 1f));
+
+            var engageClosestTarget = new DoSimultaneouslyUntilAllAreDone(
+                    new FaceClosestVisibleTarget(),
+                    new CycleThrough(
+                        shootAndReloadOnce,
+                        new DoWhile(
+                            new RunTowardsClosestTarget(),
+                            c => !HasVisibleAliveTarget(c), 
+                            "while target is not visible"),
+                        new DoWithTimeout(new RunTowardsClosestTarget(), 0.5f),
+                        new StopMoving()));
+
+            var engageAllTargets = new DoWhile(
+                engageClosestTarget,
+                HasAliveTarget,
+                "any visible alive targets");
+
+            var alertBehaviour = new DoInOrder(
+                new EquipGun(),
+                new DoWhile(
+                    new InvestigateNoise(),
+                    c => !HasVisibleAliveTarget(c),
+                    "any alive targets"),
+                engageAllTargets,
+                new DoWhile(new DoNothing(), HasHeardAnyGunshots, "any gunshots heard"),
+                new DoWithTimeout(new DoNothing(), 3f),
+                new UnequipGun());
 
             return alertBehaviour;
+        }
+
+        /// <summary>
+        /// Creates an "alert" behaviour where an NPC will escape to an escape point.
+        /// </summary>
+        /// <returns>
+        /// The NPC behaviour
+        /// </returns>
+        public static IBehaviour CreateEscapeBehaviour()
+        {
+            var escapeBehaviour = new CycleThrough(
+                new FaceForeward(),
+                new EscapeToEscapePoint(),
+                new DoWhile(
+                    new DoNothing(),
+                    c => !HasVisibleAliveTarget(c),
+                    "no enemy in sight"));
+
+            return escapeBehaviour;
         }
 
         private static IBehaviour CreateLookAroundRelaxed()
@@ -153,6 +176,32 @@ namespace Assets.Scripts.Ai.Behaviour
                 new DoWithTimeout(new LookAtClosestVisibleCharacter(), 5));
 
             return lookAroundRelaxed;
+        }
+
+        private static bool HasAliveTarget(ICharacterAccess a)
+        {
+            return a.Memory.ActiveTargets.Any(c => c.IsAlive);
+        }
+
+        private static bool HasVisibleAliveTarget(ICharacterAccess a)
+        {
+            return a.Perception.CharactersInView.Any(c =>
+                    c.IsAlive &&
+                    a.Memory.ActiveTargets.Contains(c));
+        }
+
+        private static bool HasHeardAnyGunshots(ICharacterAccess c)
+        {
+            var hasHeardAnyGunshots = c.Memory.NoisesHeard.Any(n => n.Type == NoiseType.GunShot);
+
+            return hasHeardAnyGunshots;
+        }
+
+        private static bool HasAnyThreats(ICharacterAccess c)
+        {
+            return
+                HasAliveTarget(c) ||
+                HasHeardAnyGunshots(c);
         }
     }
 }

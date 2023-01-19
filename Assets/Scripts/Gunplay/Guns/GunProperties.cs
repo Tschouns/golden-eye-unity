@@ -17,7 +17,6 @@ namespace Assets.Scripts.Gunplay.Guns
         private CartridgeSpec cartridge;
 
         [SerializeField]
-        [Range(1, 100)]
         private int fireRate = 3;
 
         [SerializeField]
@@ -33,8 +32,10 @@ namespace Assets.Scripts.Gunplay.Guns
         private float reloadTime = 1.5f;
 
         [SerializeField]
-        [Range(0, 30)]
         private float maxDeviationDegrees = 5f;
+
+        [SerializeField]
+        private float audibleDistance = 20f;
 
         [SerializeField]
         private AbstractSoundEmitter shootSound;
@@ -53,6 +54,7 @@ namespace Assets.Scripts.Gunplay.Guns
         public int ClipSize => this.clipSize;
         public float ReloadTime => this.reloadTime;
         public float MaxDeviationRadians => this.maxDeviationDegrees * Mathf.Deg2Rad;
+        public float AudibleDistance => this.audibleDistance;
         public ISoundEmitter ShootSound => this.shootSound;
         public ISoundEmitter DryFireSound => this.dryFireSound;
         public ISoundEmitter ReloadSound => this.reloadSound;
@@ -62,6 +64,10 @@ namespace Assets.Scripts.Gunplay.Guns
             Debug.Assert(!string.IsNullOrEmpty(this.uniqueName));
             Debug.Assert(this.cartridge != null);
             Debug.Assert(this.fireRate > 0);
+            Debug.Assert(this.clipSize > 0);
+            Debug.Assert(this.reloadTime > 0);
+            Debug.Assert(this.maxDeviationDegrees > 0);
+            Debug.Assert(this.audibleDistance > 0);
             Debug.Assert(this.shootSound != null);
             Debug.Assert(this.dryFireSound != null);
             Debug.Assert(this.reloadSound != null);

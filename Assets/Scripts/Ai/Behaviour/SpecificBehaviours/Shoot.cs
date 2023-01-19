@@ -6,7 +6,9 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
     /// </summary>
     public class Shoot : IBehaviour
     {
-        public string Description => "Shoot a gun.";
+        private bool pulledTrigger = false;
+
+        public string Description => "Shoot the gun.";
 
         public bool IsDone { get; private set; } = false;
 
@@ -23,7 +25,12 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
                 return;
             }
 
-            characterAccess.GunHandler.Shoot();
+            if (this.pulledTrigger)
+            {
+                characterAccess.GunHandler.Shoot();
+            }
+
+            this.pulledTrigger = !this.pulledTrigger;
         }
     }
 }

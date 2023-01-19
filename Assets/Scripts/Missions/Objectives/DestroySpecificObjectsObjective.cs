@@ -13,9 +13,13 @@ namespace Assets.Scripts.Missions.Objectives
         private string description = "Destroy objects.";
 
         [SerializeField]
+        private bool isOptional = false;
+
+        [SerializeField]
         private Health[] targetObjects;
 
         public string Description { get; private set; }
+        public bool IsOptional => this.isOptional;
         public MissionStatus Status { get; private set; } = MissionStatus.InProgress;
 
         private void Awake()

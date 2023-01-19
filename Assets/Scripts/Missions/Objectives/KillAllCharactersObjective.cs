@@ -19,12 +19,16 @@ namespace Assets.Scripts.Missions.Objectives
         private string description = "Kill all enemies.";
 
         [SerializeField]
+        private bool isOptional = false;
+
+        [SerializeField]
         private string faction = "soviet";
 
         [SerializeField]
         private string characterType = "combatant";
 
         public string Description { get; private set; }
+        public bool IsOptional => this.isOptional;
         public MissionStatus Status { get; private set; } = MissionStatus.InProgress;
 
         private void Awake()

@@ -1,5 +1,6 @@
 using Assets.Scripts.Gunplay.Ballistics;
 using Assets.Scripts.Misc;
+using Assets.Scripts.Noise;
 using System.Collections;
 using UnityEngine;
 
@@ -29,6 +30,7 @@ namespace Assets.Scripts.Gunplay.Guns
         [SerializeField]
         private AbstractShotEffect[] shotEffects = new AbstractShotEffect[0];
 
+        private INoiseEventBus noiseEventBus;
         private bool isTriggerActive = false;
         private bool isTriggerEntryProcessed = false;
         private bool isReady = true;
@@ -81,6 +83,9 @@ namespace Assets.Scripts.Gunplay.Guns
             Debug.Assert(this.myRigidbody != null);
             Debug.Assert(this.shotEffects != null);
             this.properties.Verify();
+
+            this.noiseEventBus = FindObjectOfType<NoiseEventBus>();
+            Debug.Assert(this.noiseEventBus != null);
 
             if (this.startWithPhysics)
             {
@@ -151,6 +156,7 @@ namespace Assets.Scripts.Gunplay.Guns
 
             this.CurrentNumberOfBullets--;
             this.properties.ShootSound.Play(this.muzzle.position);
+            this.noiseEventBus.ProduceNoise(NoiseType.GunShot, this.muzzle.position, this.properties.AudibleDistance);
             this.PlayShotEffects();
 
             // Cooldown.

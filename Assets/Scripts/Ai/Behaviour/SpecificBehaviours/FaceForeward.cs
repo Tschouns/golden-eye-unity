@@ -8,15 +8,17 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
     {
         public string Description { get; } = "Face Forward.";
 
-        public bool IsDone => false;
+        public bool IsDone { get; private set; } = false;
 
         public void Reset()
         {
+            this.IsDone = false;
         }
 
         public void Update(ICharacterAccess characterAccess)
         {
             characterAccess.TurnAhead();
+            this.IsDone = true;
         }
     }
 }
