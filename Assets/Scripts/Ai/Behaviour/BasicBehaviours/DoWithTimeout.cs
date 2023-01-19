@@ -32,10 +32,10 @@ namespace Assets.Scripts.Ai.Behaviour.BasicBehaviours
             this.timeRunning = 0;
         }
 
-        public void Update(ICharacterAccess characterAccess)
+        public void Update(ICharacterAccess characterAccess, float deltaTime)
         {
-            this.timedBehaviour.Update(characterAccess);
-            this.timeRunning += Time.deltaTime;
+            this.timedBehaviour.Update(characterAccess, deltaTime);
+            this.timeRunning += deltaTime;
         }
     }
 }

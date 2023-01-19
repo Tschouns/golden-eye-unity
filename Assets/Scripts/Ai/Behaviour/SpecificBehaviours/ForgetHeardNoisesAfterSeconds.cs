@@ -20,7 +20,7 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
         {
         }
 
-        public void Update(ICharacterAccess characterAccess)
+        public void Update(ICharacterAccess characterAccess, float deltaTime)
         {
             foreach (var noise in characterAccess.Memory.NoisesHeard)
             {

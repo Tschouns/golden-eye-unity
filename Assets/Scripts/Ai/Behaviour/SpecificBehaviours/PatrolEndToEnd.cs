@@ -26,9 +26,9 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
 
         public bool IsDone => false;
 
-        public void Update(ICharacterAccess characterAccess)
+        public void Update(ICharacterAccess characterAccess, float deltaTime)
         {
-            this.cycle.Update(characterAccess);
+            this.cycle.Update(characterAccess, deltaTime);
         }
 
         public void Reset()

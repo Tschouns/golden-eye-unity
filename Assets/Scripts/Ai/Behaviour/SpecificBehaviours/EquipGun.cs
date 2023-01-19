@@ -19,7 +19,7 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
             this.hasStartedEquipping = false;
         }
 
-        public void Update(ICharacterAccess characterAccess)
+        public void Update(ICharacterAccess characterAccess, float deltaTime)
         {
             Debug.Assert(characterAccess.GunHandler.Gun != null);
 

@@ -7,6 +7,7 @@ using Assets.Scripts.Characters;
 using Assets.Scripts.Damage;
 using Assets.Scripts.Misc;
 using Assets.Scripts.Noise;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -57,6 +58,7 @@ namespace Assets.Scripts.Ai
         private ICharacterAccess characterAccess;
 
         private Vector3? currentFocusPoint = null;
+        private float lastUpdateTime = 0;
 
         public void NotifyOnDied()
         {
@@ -96,13 +98,13 @@ namespace Assets.Scripts.Ai
             var alert = this.alertBehaviour.GetAlertBehaviour();
 
             this.behaviour = BehaviourFactory.CreateOrchestratedNpcBehaviour(peaceful, alert, this.timeToSpot);
+
+            // Start AI update.
+            this.StartCoroutine(this.UpdateAiStuff());
         }
 
         private void Update()
         {
-            this.perception.Update();
-            this.behaviour.Update(this.characterAccess);
-
             if (this.currentFocusPoint != null)
             {
                 this.TurnTowards(this.currentFocusPoint.Value);
@@ -125,6 +127,27 @@ namespace Assets.Scripts.Ai
             // Turn the whole NPC around Y. Don't change elevation.
             updatedLookDirection.y = 0;
             this.transform.LookAt(this.transform.position + updatedLookDirection);
+        }
+
+        private IEnumerator UpdateAiStuff()
+        {
+            // Initialize.
+            this.lastUpdateTime = Time.time;
+
+            // Random offset.
+            yield return new WaitForSeconds(Random.Range(0.01f, 0.5f));
+
+            while (this.enabled)
+            {
+                var delta = Time.time - this.lastUpdateTime;
+                this.lastUpdateTime = Time.time;
+
+                // Update AI stuff.
+                this.perception.Update();
+                this.behaviour.Update(this.characterAccess, delta);
+
+                yield return new WaitForSeconds(0.1f);
+            }
         }
 
         /// <summary>

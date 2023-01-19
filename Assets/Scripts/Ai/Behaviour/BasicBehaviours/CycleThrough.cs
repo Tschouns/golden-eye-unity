@@ -21,14 +21,14 @@ namespace Assets.Scripts.Ai.Behaviour.BasicBehaviours
 
         public string Description { get; }
 
-        public void Update(ICharacterAccess characterAccess)
+        public void Update(ICharacterAccess characterAccess, float deltaTime)
         {
             if (this.sequence.IsDone)
             {
                 this.sequence.Reset();
             }
 
-            this.sequence.Update(characterAccess);
+            this.sequence.Update(characterAccess, deltaTime);
         }
 
         public void Reset()

@@ -61,6 +61,12 @@ namespace Assets.Scripts.Ai.Perception
 
         public void Update()
         {
+            //if (this.currentNoiseEvent != null &&
+            //    Vector3.Distance(this.character.Head.Position, this.currentNoiseEvent.PointOfOrigin) < this.currentNoiseEvent.AudibleDistance)
+            //{
+            //    this.currentNoiseEvent = null;
+            //}
+
             var allOtherCharacters = this.characterManager.AllCharacters.Where(c => c != this.character).ToList();
 
             this.CharactersInView = VisionHelper.CheckForVisibleCharacters(

@@ -42,7 +42,7 @@ namespace Assets.Scripts.Ai.Behaviour.BasicBehaviours
             this.isInterlude = false;
         }
 
-        public void Update(ICharacterAccess characterAccess)
+        public void Update(ICharacterAccess characterAccess, float deltaTime)
         {
             if (this.isInterlude)
             {
@@ -56,7 +56,7 @@ namespace Assets.Scripts.Ai.Behaviour.BasicBehaviours
                     return;
                 }
 
-                this.interludeBehaviour.Update(characterAccess);
+                this.interludeBehaviour.Update(characterAccess, deltaTime);
             }
             else
             {
@@ -70,8 +70,8 @@ namespace Assets.Scripts.Ai.Behaviour.BasicBehaviours
                     return;
                 }
 
-                this.baseBehaviour.Update(characterAccess);
-                this.checkBehaviour.Update(characterAccess);
+                this.baseBehaviour.Update(characterAccess, deltaTime);
+                this.checkBehaviour.Update(characterAccess, deltaTime);
             }
         }
     }

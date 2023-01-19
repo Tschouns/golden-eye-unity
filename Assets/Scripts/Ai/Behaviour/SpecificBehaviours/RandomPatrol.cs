@@ -26,7 +26,7 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
 
         public bool IsDone => false;
 
-        public void Update(ICharacterAccess characterAccess)
+        public void Update(ICharacterAccess characterAccess, float deltaTime)
         {
             // Still persuing target?
             if (this.currentTargetPoint != null &&

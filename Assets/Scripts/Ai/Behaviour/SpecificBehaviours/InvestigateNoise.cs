@@ -18,7 +18,7 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
             this.IsDone = false;
         }
 
-        public void Update(ICharacterAccess characterAccess)
+        public void Update(ICharacterAccess characterAccess, float deltaTime)
         {
             if (this.IsDone)
             {

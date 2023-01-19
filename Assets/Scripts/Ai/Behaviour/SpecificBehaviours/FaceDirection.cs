@@ -22,7 +22,7 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
         {
         }
 
-        public void Update(ICharacterAccess characterAccess)
+        public void Update(ICharacterAccess characterAccess, float deltaTime)
         {
             characterAccess.TurnTowardsPoint(characterAccess.Character.Position + this.direction);
         }

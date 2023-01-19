@@ -1,4 +1,5 @@
 using Assets.Scripts.Gunplay.Ballistics;
+using Assets.Scripts.Noise;
 using UnityEngine;
 
 namespace Assets.Scripts.Gunplay.Effects
@@ -9,8 +10,12 @@ namespace Assets.Scripts.Gunplay.Effects
     [RequireComponent(typeof(HitTarget))]
     public class SoundHitEffect : MonoBehaviour, IHitEffect
     {
+        private INoiseEventBus noiseEventBus;
+
         public void ReactToImpact(BulletImpact impact)
         {
+            this.noiseEventBus.ProduceNoise(NoiseType.BulletImpact, impact.EntryPoint, 5);
+
             switch (impact.Type)
             {
                 case BulletImpactType.Penetrated:
@@ -23,6 +28,12 @@ namespace Assets.Scripts.Gunplay.Effects
                     impact.HitMaterial.DeflectedSoundEmitter?.Play(impact.EntryPoint);
                     break;
             }
+        }
+
+        private void Awake()
+        {
+            this.noiseEventBus = FindObjectOfType<NoiseEventBus>();
+            Debug.Assert(this.noiseEventBus != null);
         }
     }
 }

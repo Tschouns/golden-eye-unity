@@ -34,9 +34,9 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
             this.characters.Clear();
         }
 
-        public void Update(ICharacterAccess characterAccess)
+        public void Update(ICharacterAccess characterAccess, float deltaTime)
         {
-            this.TrackCharactersInView(characterAccess.Perception);
+            this.TrackCharactersInView(characterAccess.Perception, deltaTime);
 
             var enemies = this.characters
                 .Where(c => c.Key.Faction != characterAccess.Character.Faction)
@@ -57,7 +57,7 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
             }
         }
 
-        private void TrackCharactersInView(IPerception perception)
+        private void TrackCharactersInView(IPerception perception, float deltaTime)
         {
             // Track characters in view.
             foreach (var character in perception.CharactersInView)
@@ -74,11 +74,11 @@ namespace Assets.Scripts.Ai.Behaviour.SpecificBehaviours
             {
                 if (perception.CharactersInView.Contains(character))
                 {
-                    this.characters[character].TimeInView += Time.deltaTime;
+                    this.characters[character].TimeInView += deltaTime;
                 }
                 else
                 {
-                    this.characters[character].TimeInView = Mathf.Max(0, this.characters[character].TimeInView - Time.deltaTime);
+                    this.characters[character].TimeInView = Mathf.Max(0, this.characters[character].TimeInView - deltaTime);
                 }
             }
         }
