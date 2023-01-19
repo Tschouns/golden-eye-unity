@@ -12,6 +12,11 @@ namespace Assets.Scripts.Missions
         string Description { get; }
 
         /// <summary>
+        /// Gets a value indicating whether the objective is optional
+        /// </summary>
+        bool IsOptional { get; }
+
+        /// <summary>
         /// Gets the current mission goal status.
         /// </summary>
         MissionStatus Status { get; }

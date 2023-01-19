@@ -6,6 +6,7 @@ using Assets.Scripts.Ai.Perception;
 using Assets.Scripts.Characters;
 using Assets.Scripts.Damage;
 using Assets.Scripts.Misc;
+using Assets.Scripts.Noise;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -77,12 +78,16 @@ namespace Assets.Scripts.Ai
             this.navMeshAgent.angularSpeed = this.angularSpeed;
 
             // Setup the "character access" -- properties of the character the behaviour can access.
+            var noiseEventBus = FindObjectOfType<NoiseEventBus>();
+            Debug.Assert(noiseEventBus != null);
+
             var characterManager = FindObjectOfType<CharacterManager>();
             Debug.Assert(characterManager != null);
 
             var escapePointManager = FindObjectOfType<EscapePointManager>();
+            Debug.Assert(escapePointManager != null);
 
-            this.perception = new PerceptionImpl(this.thisCharacter, characterManager, () => this.fieldOfView);
+            this.perception = new PerceptionImpl(this.thisCharacter, noiseEventBus, characterManager, () => this.fieldOfView);
             this.memory = new MemoryImpl(escapePointManager);
             this.characterAccess = new CharacterAccess(this);
 

@@ -1,5 +1,7 @@
 ﻿using Assets.Scripts.Ai.Behaviour;
+using Assets.Scripts.Ai.Behaviour.BasicBehaviours;
 using Assets.Scripts.Ai.Behaviour.SpecificBehaviours;
+using System.Linq;
 
 namespace Assets.Scripts.Ai.Configuration.AlertBehaviours
 {
@@ -10,7 +12,7 @@ namespace Assets.Scripts.Ai.Configuration.AlertBehaviours
     {
         public override IBehaviour GetAlertBehaviour()
         {
-            return new EscapeToEscapePoint();
+            return BehaviourFactory.CreateEscapeBehaviour();
         }
 
         public override void Verify()

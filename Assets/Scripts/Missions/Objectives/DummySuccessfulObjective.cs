@@ -10,7 +10,11 @@ namespace Assets.Scripts.Missions.Objectives
         [SerializeField]
         private string description = "Dummy objective.";
 
+        [SerializeField]
+        private bool isOptional = false;
+
         public string Description => this.description;
+        public bool IsOptional => this.isOptional;
         public MissionStatus Status { get; private set; } = MissionStatus.Completed;
     }
 }

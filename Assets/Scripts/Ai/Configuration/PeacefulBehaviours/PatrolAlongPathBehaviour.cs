@@ -14,9 +14,8 @@ namespace Assets.Scripts.Ai.Configuration.PeacefulBehaviours
         public override IBehaviour GetPeacefulBehaviour()
         {
             var positions = this.patrolPath.PatrolPoints.Select(p => p.Position).ToArray();
-            var patrolBehaviour = new PatrolEndToEnd(positions);
 
-            return patrolBehaviour;
+            return BehaviourFactory.CreatePatrolAlongPathBehaviour(positions);
         }
 
         public override void Verify()

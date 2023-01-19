@@ -1,6 +1,7 @@
 ﻿
 using Assets.Scripts.Ai.Navigation;
 using Assets.Scripts.Characters;
+using Assets.Scripts.Noise;
 using System.Collections.Generic;
 
 namespace Assets.Scripts.Ai.Memory
@@ -16,9 +17,33 @@ namespace Assets.Scripts.Ai.Memory
         IEnumerable<IEscapePoint> EscapePoints { get; }
 
         /// <summary>
+        /// Gets all the noise events heard in the past.
+        /// </summary>
+        IList<NoiseEvent> NoisesHeard { get; }
+
+        /// <summary>
         /// Gets the NPC's current active targets.
         /// </summary>
-        ICollection<ICharacter> ActiveTargets { get; }
+        IReadOnlyCollection<ICharacter> ActiveTargets { get; }
+
+        ///// <summary>
+        ///// Adds a noise event to the memory.
+        ///// </summary>
+        ///// <param name="noiseEvent">
+        ///// The noise event
+        ///// </param>
+        //void AddNoiseEvent(NoiseEvent noiseEvent);
+
+        /// <summary>
+        /// Tries to adds an active target to the memory.
+        /// </summary>
+        /// <param name="activeTarget">
+        /// The active target
+        /// </param>
+        /// <returns>
+        /// A value indicating whether the target was actually added
+        /// </returns>
+        bool TryAddActiveTarget(ICharacter activeTarget);
 
         /// <summary>
         /// Gets the known information on the specified character.
